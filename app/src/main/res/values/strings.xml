@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">PawdictedAdmin</string>
+    <string name="dashboard_title">Pawdicted Dashboard</string>
+    <string name="revenue">Doanh thu</string>
+    <string name="orders">Đơn hàng</string>
+    <string name="products">Sản phẩm</string>
+    <string name="analytics">Phân tích</string>
+    <string name="customers">Khách hàng</string>
+    <string name="inventory">Kho hàng</string>
+    <string name="settings">Cài đặt</string>
+    <string name="loading">Đang tải...</string>
+    <string name="error_loading_data">Lỗi tải dữ liệu</string>
+    <string name="no_data_available">Không có dữ liệu</string>
+    <string name="refresh">Làm mới</string>
+    <string name="search">Tìm kiếm</string>
+    <string name="add_product">Thêm sản phẩm</string>
+    <string name="edit_product">Sửa sản phẩm</string>
+    <string name="delete_product">Xóa sản phẩm</string>
+    <string name="product_name">Tên sản phẩm</string>
+    <string name="product_price">Giá sản phẩm</string>
+    <string name="product_stock">Số lượng tồn</string>
+    <string name="product_category">Danh mục</string>
+    <string name="order_status_pending">Chờ xử lý</string>
+    <string name="order_status_confirmed">Đã xác nhận</string>
+    <string name="order_status_shipping">Đang giao</string>
+    <string name="order_status_completed">Hoàn thành</string>
+    <string name="order_status_cancelled">Đã hủy</string>
+    <string name="revenue_report">Revenue Report</string>
+    <string name="profit_report">Profit Report</string>
+    <string name="trend_analysis">Trend Analysis</string>
+    <string name="financial_summary">Financial Summary</string>
+</resources>
