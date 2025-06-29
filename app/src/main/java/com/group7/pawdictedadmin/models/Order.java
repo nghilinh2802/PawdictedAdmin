@@ -43,6 +43,22 @@ public class Order {
         @PropertyName("phone_number")
         private String phone;
         private String address;
+        private String avatar_img;
+
+        public Customer(String name, String phone, String address, String avatar_img) {
+            this.name = name;
+            this.phone = phone;
+            this.address = address;
+            this.avatar_img = avatar_img;
+        }
+
+        public String getAvatar_img() {
+            return avatar_img;
+        }
+
+        public void setAvatar_img(String avatar_img) {
+            this.avatar_img = avatar_img;
+        }
 
         public Customer() {}
 

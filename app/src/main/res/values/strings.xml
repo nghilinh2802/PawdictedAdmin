@@ -63,7 +63,7 @@
     <string name="activities_will_appear_here">Activity will appear here</string>
     <string name="activity_icon">Activity Icon</string>
     <string name="view_details">View Details</string>
-    <string name="pawdicted_admin_customer_service">🐾 Pawdicted Admin - Customer Service</string>
+    <string name="pawdicted_admin_customer_service">Customer Service</string>
     <string name="chatwithcus">Chat with Customer</string>
     <string name="hint_type">Type a message...</string>
     <string name="customer_name">Customer Name</string>

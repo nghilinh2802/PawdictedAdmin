@@ -57,12 +57,12 @@ public class PendingOrderAdapter extends RecyclerView.Adapter<PendingOrderAdapte
         int itemCount = (items != null) ? items.size() : 0;
         holder.tvItemCount.setText("Tổng cộng: " + itemCount + " sản phẩm");
 
-        Glide.with(context)
-                .load(R.mipmap.ic_logo)
-                .placeholder(R.mipmap.ic_logo)
-                .error(R.mipmap.ic_logo)
-                .circleCrop()
-                .into(holder.imgCustomerAvatar);
+//        Glide.with(context)
+//                .load(R.mipmap.ic_logo)
+//                .placeholder(R.mipmap.ic_logo)
+//                .error(R.mipmap.ic_logo)
+//                .circleCrop()
+//                .into(holder.imgCustomerAvatar);
     }
 
     @Override
@@ -72,7 +72,7 @@ public class PendingOrderAdapter extends RecyclerView.Adapter<PendingOrderAdapte
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView tvOrderCode, tvCustomerName, tvOrderValue, tvStatus, tvOrderTime, tvItemCount;
-        public ImageView imgCustomerAvatar;
+//        public ImageView imgCustomerAvatar;
         public MaterialButton btnOrderDetails;
 
         public ViewHolder(@NonNull View itemView) {
@@ -83,7 +83,7 @@ public class PendingOrderAdapter extends RecyclerView.Adapter<PendingOrderAdapte
             tvStatus = itemView.findViewById(R.id.tv_status);
             tvOrderTime = itemView.findViewById(R.id.tv_order_time);
             tvItemCount = itemView.findViewById(R.id.tv_item_count);
-            imgCustomerAvatar = itemView.findViewById(R.id.img_customer_avatar);
+//            imgCustomerAvatar = itemView.findViewById(R.id.img_customer_avatar);
 //            btnOrderDetails = itemView.findViewById(R.id.tv_order_details); // Enable if in layout
         }
     }

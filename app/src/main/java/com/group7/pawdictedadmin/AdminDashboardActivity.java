@@ -153,15 +153,26 @@ public class AdminDashboardActivity extends AppCompatActivity implements Navigat
                 });
 
         // Load pending messages
-        db.collection("messages")
-                .whereEqualTo("status", "pending")
+//        db.collection("messages")
+//                .whereEqualTo("status", "pending")
+//                .get(Source.SERVER)
+//                .addOnSuccessListener(querySnapshot -> {
+//                    txtPendingMessages.setText(String.valueOf(querySnapshot.size()));
+//                })
+//                .addOnFailureListener(e -> {
+//                    txtPendingMessages.setText("0");
+//                    Toast.makeText(this, "Failed to load messages", Toast.LENGTH_SHORT).show();
+//                });
+
+        // Load number of unique chats (people who sent messages)
+        db.collection("chats")
                 .get(Source.SERVER)
                 .addOnSuccessListener(querySnapshot -> {
                     txtPendingMessages.setText(String.valueOf(querySnapshot.size()));
                 })
                 .addOnFailureListener(e -> {
                     txtPendingMessages.setText("0");
-                    Toast.makeText(this, "Failed to load messages", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Failed to load chat count", Toast.LENGTH_SHORT).show();
                 });
     }
 

@@ -3,31 +3,37 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="4dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="2dp">
+    android:layout_margin="8dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp"
+    app:cardBackgroundColor="#FFFFFF"
+    app:cardUseCompatPadding="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="16dp"
+        android:padding="12dp"
         android:gravity="center_vertical">
 
-        <TextView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="@drawable/customer_avatar_background"
+        <!-- Avatar -->
+        <ImageView
+            android:id="@+id/img_customer_avatar"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/gray_rounded_background"
             android:gravity="center"
-            android:text="👤"
             android:textColor="#FFFFFF"
-            android:textSize="18sp" />
+            android:textSize="20sp"
+            app:cardCornerRadius="24dp" />
 
+        <!-- Customer Info -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginStart="12dp"
+            android:layout_marginEnd="8dp"
             android:orientation="vertical">
 
             <TextView
@@ -35,9 +41,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/customer_name"
-                android:textColor="#333333"
+                android:textColor="#1A1A1A"
                 android:textSize="16sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-medium" />
 
             <TextView
                 android:id="@+id/txt_last_message"
@@ -45,13 +52,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:text="@string/last_message_content"
-                android:textColor="#666666"
+                android:textColor="#757575"
                 android:textSize="14sp"
                 android:maxLines="2"
                 android:ellipsize="end" />
 
         </LinearLayout>
 
+        <!-- Time and Badge -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -63,27 +71,28 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="12:30"
-                android:textColor="#999999"
-                android:textSize="12sp" />
+                android:textColor="#B0B0B0"
+                android:textSize="12sp"
+                android:fontFamily="sans-serif" />
 
             <TextView
                 android:id="@+id/txt_unread_count"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginTop="4dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginTop="6dp"
                 android:background="@drawable/unread_badge_background"
                 android:gravity="center"
                 android:text="3"
                 android:textColor="#FFFFFF"
-                android:textSize="10sp"
+                android:textSize="12sp"
                 android:textStyle="bold"
                 android:visibility="gone" />
 
             <View
                 android:id="@+id/unread_indicator"
-                android:layout_width="8dp"
-                android:layout_height="8dp"
-                android:layout_marginTop="2dp"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginTop="4dp"
                 android:background="@drawable/unread_indicator"
                 android:visibility="gone" />
 

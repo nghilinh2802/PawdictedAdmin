@@ -127,6 +127,7 @@ public class OrderManagementActivity extends AppCompatActivity {
                             customer.setName(customerDoc.getString("customer_name"));
                             customer.setPhone(customerDoc.getString("phone_number"));
                             customer.setAddress(customerDoc.getString("address"));
+//                            customer.setAvatar_img(customerDoc.getString("avatar_img"));
                             order.setCustomer(customer);
 
                             // Tìm vị trí của order trong list và update

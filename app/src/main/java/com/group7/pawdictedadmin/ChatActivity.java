@@ -60,6 +60,7 @@ public class ChatActivity extends AppCompatActivity {
         chatId = intent.getStringExtra("chat_id");
         customerId = intent.getStringExtra("customer_id");
         customerName = intent.getStringExtra("customer_name");
+        
 
         Log.d("ChatActivity", "Chat ID: " + chatId);
         Log.d("ChatActivity", "Customer ID: " + customerId);
