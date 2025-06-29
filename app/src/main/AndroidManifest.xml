@@ -16,6 +16,9 @@
         android:theme="@style/Theme.PawdictedAdmin"
         tools:targetApi="31">
         <activity
+            android:name=".OrderDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".SettingManagementActivity"
             android:exported="false" />
         <activity

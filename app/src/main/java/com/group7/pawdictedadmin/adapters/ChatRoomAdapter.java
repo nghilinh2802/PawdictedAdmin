@@ -203,11 +203,11 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ChatRo
                 txtUnreadCount.setVisibility(View.VISIBLE);
                 txtUnreadCount.setText(String.valueOf(unreadCount));
                 unreadIndicator.setVisibility(View.VISIBLE);
-                itemView.setBackgroundResource(R.drawable.chat_room_unread_background);
+                itemView.setBackgroundResource(R.drawable.chat_room_background);
             } else {
                 txtUnreadCount.setVisibility(View.GONE);
                 unreadIndicator.setVisibility(View.GONE);
-                itemView.setBackgroundResource(R.drawable.chat_room_background);
+                itemView.setBackgroundResource(R.drawable.chat_room_unread_background);
             }
         }
     }

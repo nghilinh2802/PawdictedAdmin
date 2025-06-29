@@ -5,9 +5,7 @@
     android:layout_height="match_parent"
     android:paddingTop="10dp"
     android:paddingBottom="10dp"
-    android:background="#9C162C"
-
-    >
+    android:background="#9C162C">
 
     <!-- Header: icon + title -->
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -28,7 +26,8 @@
             android:layout_marginStart="5dp"
             android:src="@drawable/ic_arrow_back"
             android:tint="#FFFFFF"
-            android:onClick="onBackPressed"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="6dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
@@ -49,17 +48,88 @@
             android:gravity="center" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- RecyclerView -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_pending_orders"
+    <!-- Content Area with SwipeRefreshLayout -->
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_layout"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="#9C162C"
-        android:clipToPadding="false"
-        android:padding="16dp"
-        android:overScrollMode="never"
         app:layout_constraintTop_toBottomOf="@id/header_bar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <!-- RecyclerView -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_pending_orders"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#9C162C"
+            android:clipToPadding="false"
+            android:padding="16dp"
+            android:overScrollMode="never"
+            android:scrollbars="vertical" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <!-- Progress Bar for loading -->
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:indeterminateTint="#FFFFFF"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Empty State TextView -->
+    <LinearLayout
+        android:id="@+id/empty_state_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Empty State Icon -->
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@mipmap/ic_logo"
+            android:tint="#FFFFFF"
+            android:alpha="0.6"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Empty State Text -->
+        <TextView
+            android:id="@+id/tv_empty_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No pending orders found"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:textStyle="normal"
+            android:alpha="0.8"
+            android:gravity="center" />
+
+        <!-- Empty State Subtitle -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pull down to refresh"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:alpha="0.6"
+            android:layout_marginTop="8dp"
+            android:gravity="center" />
+
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -58,6 +59,9 @@ public class FinancialDashboardActivity extends AppCompatActivity {
     // Loading state
     private boolean isDataLoading = false;
     private boolean isDataLoaded = false;
+    private ImageView btnBack;
+
+
 
     static class FlashsaleInfo {
         String productId;
@@ -84,6 +88,9 @@ public class FinancialDashboardActivity extends AppCompatActivity {
         loadRealFinancialData();
         setupClickListeners();
         Log.d(TAG, "onCreate: End");
+
+        btnBack = findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(v -> onBackPressed());
     }
 
     private void initViews() {

@@ -252,8 +252,8 @@ public class AdminDashboardActivity extends AppCompatActivity implements Navigat
 
         if (id == R.id.nav_dashboard) {
             Toast.makeText(this, "Already on Dashboard", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.nav_settings) {
-            intent = new Intent(this, SettingManagementActivity.class);
+//        } else if (id == R.id.nav_settings) {
+//            intent = new Intent(this, SettingManagementActivity.class);
         } else if (id == R.id.nav_logout) {
             mAuth.signOut();
             intent = new Intent(this, LoginActivity.class);
