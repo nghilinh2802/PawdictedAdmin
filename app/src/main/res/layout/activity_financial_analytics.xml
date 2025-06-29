@@ -34,7 +34,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Phân tích kinh doanh"
+                android:text="@string/title_financial_analytics"
                 android:textSize="20sp"
                 android:textColor="@color/colorOnPrimary"
                 android:textStyle="bold"
@@ -92,7 +92,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Tổng doanh thu"
+                            android:text="@string/title_total_revenue"
                             android:textSize="12sp"
                             android:textColor="@color/textColorSecondary"
                             android:layout_marginTop="4dp" />
@@ -137,7 +137,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Tổng đơn hàng"
+                            android:text="@string/title_total_order"
                             android:textSize="12sp"
                             android:textColor="@color/textColorSecondary"
                             android:layout_marginTop="4dp" />
@@ -191,7 +191,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Khách hàng"
+                            android:text="@string/title_customer"
                             android:textSize="12sp"
                             android:textColor="@color/textColorSecondary"
                             android:layout_marginTop="4dp" />
@@ -227,7 +227,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Giá trị TB/đơn"
+                            android:text="@string/title_average_per_order"
                             android:textSize="12sp"
                             android:textColor="@color/textColorSecondary"
                             android:layout_marginTop="4dp" />
@@ -258,7 +258,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Xu hướng doanh thu 30 ngày"
+                    android:text="@string/revenue_trend_30"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:textColor="@color/textColorPrimary"
@@ -291,7 +291,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Hiệu suất theo danh mục"
+                    android:text="@string/performance_by_cate"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:textColor="@color/textColorPrimary"
@@ -324,7 +324,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Phân bố trạng thái đơn hàng"
+                    android:text="@string/order_status_distribution"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:textColor="@color/textColorPrimary"
@@ -349,7 +349,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Thông tin chi tiết"
+                android:text="@string/detail_info"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="@color/textColorPrimary"
@@ -388,7 +388,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Sản phẩm bán chạy nhất"
+                            android:text="@string/best_seller"
                             android:textSize="14sp"
                             android:textStyle="bold"
                             android:textColor="@color/textColorPrimary" />
@@ -397,7 +397,7 @@
                             android:id="@+id/tvTopProduct"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Đang tải..."
+                            android:text="@string/loading"
                             android:textSize="12sp"
                             android:textColor="@color/textColorSecondary"
                             android:layout_marginTop="4dp" />

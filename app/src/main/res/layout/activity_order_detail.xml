@@ -30,7 +30,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Order Details"
+            android:text="@string/order_details"
             android:textColor="@android:color/white"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -114,7 +114,7 @@
                             android:layout_width="0dp"
                             android:layout_weight="1"
                             android:layout_height="wrap_content"
-                            android:text="Order code"
+                            android:text="@string/order_code"
                             android:textColor="#000000"
                             android:textSize="14sp" />
 
@@ -138,7 +138,7 @@
                             android:layout_width="0dp"
                             android:layout_weight="1"
                             android:layout_height="wrap_content"
-                            android:text="Payment method"
+                            android:text="@string/payment_method"
                             android:textColor="#000000"
                             android:textSize="14sp" />
 
@@ -161,7 +161,7 @@
                             android:layout_width="0dp"
                             android:layout_weight="1"
                             android:layout_height="wrap_content"
-                            android:text="Order time"
+                            android:text="@string/order_time"
                             android:textColor="#000000"
                             android:textSize="14sp" />
 
@@ -195,7 +195,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Delivery Address"
+                        android:text="@string/delivery_address"
                         android:textColor="#9C162C"
                         android:textStyle="bold"
                         android:textSize="16sp"
@@ -205,7 +205,7 @@
                         android:id="@+id/tv_customer_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Customer Name"
+                        android:text="@string/customer_name"
                         android:textColor="#000000"
                         android:textSize="14sp"
                         android:layout_marginBottom="4dp" />
@@ -214,7 +214,7 @@
                         android:id="@+id/tv_phone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Phone Number"
+                        android:text="@string/phone_number"
                         android:textColor="#000000"
                         android:textSize="14sp"
                         android:layout_marginBottom="4dp" />
@@ -223,7 +223,7 @@
                         android:id="@+id/tv_address"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Address"
+                        android:text="@string/address"
                         android:textColor="#000000"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -248,7 +248,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Product List"
+                        android:text="@string/product_list"
                         android:textColor="#9C162C"
                         android:textStyle="bold"
                         android:textSize="16sp"
@@ -289,7 +289,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Total cost of goods"
+                            android:text="@string/total_cost_of_goods"
                             android:textColor="#000000"
                             android:textSize="14sp" />
 
@@ -313,7 +313,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Shipping fee"
+                            android:text="@string/shipping_fee"
                             android:textColor="#000000"
                             android:textSize="14sp" />
 
@@ -336,7 +336,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Total price"
+                            android:text="@string/total_price"
                             android:textStyle="bold"
                             android:textColor="#000000"
                             android:textSize="15sp" />
@@ -372,7 +372,7 @@
             android:id="@+id/btn_confirm_order"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:text="Confirm Order"
+            android:text="@string/confirm_order"
             android:textColor="@android:color/white"
             android:textSize="16sp"
             android:textStyle="bold"

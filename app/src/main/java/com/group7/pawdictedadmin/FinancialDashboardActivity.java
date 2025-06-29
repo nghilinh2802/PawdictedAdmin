@@ -904,10 +904,10 @@ public class FinancialDashboardActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        cardFinancialSummary.setOnClickListener(v -> {
-            Intent intent = new Intent(FinancialDashboardActivity.this, FinancialSummaryActivity.class);
-            startActivity(intent);
-        });
+//        cardFinancialSummary.setOnClickListener(v -> {
+//            Intent intent = new Intent(FinancialDashboardActivity.this, FinancialSummaryActivity.class);
+//            startActivity(intent);
+//        });
 
         Log.d(TAG, "setupClickListeners: Navigation setup complete");
     }

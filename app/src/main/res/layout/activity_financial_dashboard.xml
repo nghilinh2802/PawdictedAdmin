@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="Dashboard Tài Chính"
+                android:text="@string/financial_dashboard"
                 android:textAlignment="center"
                 android:textColor="#FFFFFF"
                 android:textSize="20sp"
@@ -78,7 +78,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Tổng Doanh Thu"
+                        android:text="@string/total_revenue"
                         android:textColor="#666666"
                         android:textSize="10sp" />
 
@@ -114,7 +114,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Tổng Lợi Nhuận"
+                        android:text="@string/title_total_profit"
                         android:textColor="#666666"
                         android:textSize="10sp" />
 
@@ -158,7 +158,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Tổng Đơn Hàng"
+                        android:text="@string/title_total_order"
                         android:textColor="#666666"
                         android:textSize="10sp" />
 
@@ -194,7 +194,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Tỷ Suất Lợi Nhuận"
+                        android:text="@string/profit_rate"
                         android:textColor="#666666"
                         android:textSize="10sp" />
 

@@ -117,19 +117,16 @@ public class AdminDashboardActivity extends AppCompatActivity implements Navigat
         });
 
         cardUsers.setOnClickListener(v -> {
-            Intent intent = new Intent(this, RoleManagementActivity.class);
-            startActivity(intent);
+            Toast.makeText(this, R.string.title_function_on_develop, Toast.LENGTH_SHORT).show();
         });
 
         cardProducts.setOnClickListener(v -> {
-            Intent intent = new Intent(this, ProductManagementActivity.class);
-            startActivity(intent);
+            Toast.makeText(this, R.string.title_function_on_develop, Toast.LENGTH_SHORT).show();
         });
 
         // View all activities button
         btnViewAllActivities.setOnClickListener(v -> {
-            Intent intent = new Intent(this, AllActivitiesActivity.class);
-            startActivity(intent);
+            Toast.makeText(this, R.string.title_function_on_develop, Toast.LENGTH_SHORT).show();
         });
     }
 
