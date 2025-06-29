@@ -34,7 +34,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/title_financial_analytics"
+                android:text="@string/title_analyze_business_performance"
                 android:textSize="20sp"
                 android:textColor="@color/colorOnPrimary"
                 android:textStyle="bold"
@@ -92,10 +92,10 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/title_total_revenue"
-                            android:textSize="12sp"
+                            android:layout_marginTop="4dp"
+                            android:text="@string/total_revenue"
                             android:textColor="@color/textColorSecondary"
-                            android:layout_marginTop="4dp" />
+                            android:textSize="12sp" />
 
                         <TextView
                             android:id="@+id/tvRevenueGrowth"
@@ -137,10 +137,10 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/title_total_order"
-                            android:textSize="12sp"
+                            android:layout_marginTop="4dp"
+                            android:text="@string/orders"
                             android:textColor="@color/textColorSecondary"
-                            android:layout_marginTop="4dp" />
+                            android:textSize="12sp" />
 
                         <TextView
                             android:id="@+id/tvOrderGrowth"
@@ -191,10 +191,10 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/title_customer"
-                            android:textSize="12sp"
+                            android:layout_marginTop="4dp"
+                            android:text="@string/customers"
                             android:textColor="@color/textColorSecondary"
-                            android:layout_marginTop="4dp" />
+                            android:textSize="12sp" />
 
                     </LinearLayout>
 
@@ -227,7 +227,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/title_average_per_order"
+                            android:text="@string/average_value"
                             android:textSize="12sp"
                             android:textColor="@color/textColorSecondary"
                             android:layout_marginTop="4dp" />
@@ -258,7 +258,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/revenue_trend_30"
+                    android:text="@string/revenue_trend_in_30days"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:textColor="@color/textColorPrimary"
@@ -291,7 +291,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/performance_by_cate"
+                    android:text="@string/performance_by_category"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:textColor="@color/textColorPrimary"
@@ -324,7 +324,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/order_status_distribution"
+                    android:text="Phân bố trạng thái đơn hàng"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:textColor="@color/textColorPrimary"
@@ -349,7 +349,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/detail_info"
+                android:text="@string/detail_infor"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="@color/textColorPrimary"
@@ -397,10 +397,10 @@
                             android:id="@+id/tvTopProduct"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
                             android:text="@string/loading"
-                            android:textSize="12sp"
                             android:textColor="@color/textColorSecondary"
-                            android:layout_marginTop="4dp" />
+                            android:textSize="12sp" />
 
                     </LinearLayout>
 
@@ -447,7 +447,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Cảnh báo tồn kho"
+                            android:text="@string/alert_stock"
                             android:textSize="14sp"
                             android:textStyle="bold"
                             android:textColor="@color/textColorPrimary" />
@@ -455,7 +455,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="3 sản phẩm sắp hết hàng"
+                            android:text="@string/three_product_running_out"
                             android:textSize="12sp"
                             android:textColor="@color/colorAccent"
                             android:layout_marginTop="4dp" />
@@ -504,7 +504,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Danh mục phổ biến nhất"
+                            android:text="@string/most_popular_cate"
                             android:textSize="14sp"
                             android:textStyle="bold"
                             android:textColor="@color/textColorPrimary" />
@@ -513,10 +513,10 @@
                             android:id="@+id/tvTopCategory"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Đang tải..."
-                            android:textSize="12sp"
+                            android:layout_marginTop="4dp"
+                            android:text="@string/loading"
                             android:textColor="@color/textColorSecondary"
-                            android:layout_marginTop="4dp" />
+                            android:textSize="12sp" />
 
                     </LinearLayout>
 

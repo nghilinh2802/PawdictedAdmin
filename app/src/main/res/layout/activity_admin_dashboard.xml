@@ -72,10 +72,9 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:src="@mipmap/ic_category"
-                android:tint="#ffffff"
                 android:layout_gravity="center_vertical"
                 android:padding="4dp"
-                />
+                app:tint="#ffffff" />
 
         </LinearLayout>
 
@@ -139,9 +138,8 @@
                                     android:layout_width="32dp"
                                     android:layout_height="32dp"
                                     android:src="@drawable/ic_shopping_cart"
-                                    android:tint="#9c162c"
                                     android:layout_marginBottom="12dp"
-                                    />
+                                    app:tint="#9c162c" />
 
                                 <TextView
                                     android:id="@+id/txtTotalOrders"

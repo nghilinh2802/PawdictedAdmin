@@ -96,4 +96,137 @@
     <string name="title_function_on_develop">Function is on developing. Please access website!</string>
     <string name="you_have_no_permission">You have no permission to access!</string>
     <string name="logout">Logout</string>
+    <string name="title_analyze_business_performance">Analyze Business Performance</string>
+    <string name="average_value">Average Value</string>
+    <string name="revenue_trend_in_30days">Revenue Trend In The Next 30days</string>
+    <string name="performance_by_category">Performance by category</string>
+    <string name="detail_infor">Detail Information</string>
+    <string name="alert_stock">Running out of stock</string>
+    <string name="three_product_running_out">3 products is running out of stock</string>
+    <string name="most_popular_cate">Most Popular Category</string>
+    <string name="revenue_growth">Revenue Growth</string>
+    <string name="profit_growth">Profit Growth</string>
+    <string name="order_growth">Order Growth</string>
+    <string name="profit_margins_growth">Profit Margins Growth</string>
+    <string name="revenue_chart">Revenue Chart</string>
+    <string name="profit_chart">Profit Chart</string>
+    <string name="revenue_by_cate">Revenue by Category</string>
+    <string name="detail_report">Detail Report</string>
+    <string name="fs_and_nofs_compare">Detail Analyze Flashsale and Normal Revenue</string>
+    <string name="analyze_profit_by_cate_n_flashsale">Phân tích lợi nhuận theo danh mục và flashsale</string>
+    <string name="month_quarter_growth_trend">Monthly and quarterly growth trends</string>
+    <string name="finance_overview">Finance Overview</string>
+    <string name="summary">Comprehensive summary with insights and recommendations</string>
+    <string name="profit_report_title">Báo cáo Lợi nhuận</string>
+
+    <!-- Loading states -->
+    <string name="calculating">Calculating</string>
+    <string name="loading_ellipsis">Loading...</string>
+    <string name="no_data">No data</string>
+
+    <!-- Profit Summary Section -->
+    <string name="profit_overview">Profit overview</string>
+    <string name="total_profit">Total Profit</string>
+    <string name="daily_average">Daily Average</string>
+    <string name="profit_margin">Profit Margin</string>
+    <string name="best_profit_day">Best Profit Day</string>
+
+    <!-- Profit Breakdown Section -->
+    <string name="profit_breakdown">Profit breakdown</string>
+    <string name="flashsale_profit">Flashsale Profit</string>
+    <string name="normal_profit">Normal Profit</string>
+
+    <!-- Profit Impact Section -->
+    <string name="flashsale_impact">Flashsale Impact</string>
+
+    <!-- Charts Section -->
+    <string name="daily_profit_chart">Daily Profit Chart</string>
+    <string name="category_profit_chart">Profit by Category</string>
+        <!-- Header -->
+        <string name="revenue_report_title">Revenue Report</string>
+
+        <!-- Loading states -->
+
+        <string name="default_currency_value">$0</string>
+
+        <!-- Revenue Summary Section -->
+        <string name="revenue_overview">Revenue Overview</string>
+
+
+        <!-- Revenue Breakdown Section -->
+        <string name="revenue_breakdown">Revenue Breakdown</string>
+        <string name="flashsale_revenue">Flashsale Revenue</string>
+        <string name="normal_revenue">Regular Revenue</string>
+
+        <!-- Daily Performance Section -->
+        <string name="daily_performance">Daily Performance</string>
+        <string name="best_day">Best Day</string>
+        <string name="worst_day">Worst Day</string>
+        <string name="voucher_impact">Voucher Impact</string>
+
+        <!-- Charts Section -->
+        <string name="daily_revenue_chart">Daily Revenue</string>
+        <string name="monthly_revenue_chart">Monthly Revenue</string>
+        <!-- Header -->
+        <string name="trend_analysis_title">Trend Analysis</string>
+
+        <!-- Default values -->
+        <string name="default_percentage">+0%</string>
+        <string name="default_number">0</string>
+
+        <!-- Growth Section -->
+        <string name="growth_vs_last_month">Growth vs Last Month</string>
+        <string name="margin">Margin</string>
+
+        <!-- Comparison Section -->
+        <string name="current_vs_last_month">Current Month vs Last Month</string>
+        <string name="current_month">Current Month</string>
+        <string name="last_month">Last Month</string>
+        <!-- Analysis Sections -->
+        <string name="trend_summary">Trend Summary</string>
+        <string name="analyzing_business_trend">Analyzing business trends...</string>
+        <string name="quarterly_growth">Quarterly Growth</string>
+        <string name="yearly_forecast">Yearly Forecast</string>
+        <string name="calculating_forecast">Calculating forecast...</string>
+        <string name="analyzing_cost">Analyzing costs...</string>
+
+        <string name="recommendations">Recommendations</string>
+        <string name="six_month_trend_chart">6-Month Trend Chart</string>
+
+        <!-- Header -->
+        <string name="financial_overview_title">Financial Overview</string>
+
+
+        <string name="financial_overview">Financial Overview</string>
+        <string name="total_orders">Total Orders</string>
+        <string name="avg_order_value">Avg Order Value</string>
+
+        <!-- Key Metrics Section -->
+        <string name="key_metrics">Key Metrics</string>
+
+        <!-- Business Analysis Section -->
+        <string name="business_analysis">Business Analysis</string>
+        <string name="analyzing_categories">Analyzing categories...</string>
+        <string name="evaluating_business_health">Evaluating business health...</string>
+
+        <!-- Growth & Projections Section -->
+        <string name="growth_and_projections">Growth and Projections</string>
+        <string name="calculating_quarterly_growth">Calculating quarterly growth...</string>
+        <string name="creating_yearly_forecast">Creating yearly forecast...</string>
+
+        <!-- Cost Analysis Section -->
+        <string name="cost_analysis">Cost Analysis</string>
+        <string name="analyzing_cost_structure">Analyzing cost structure...</string>
+
+        <!-- Recommendations Section -->
+        <string name="business_recommendations">Business Recommendations</string>
+        <string name="generating_recommendations">Generating recommendations based on analysis...</string>
+
+        <!-- Charts Section -->
+        <string name="revenue_analysis">Revenue Analysis</string>
+        <string name="profit_by_category">Profit by Category</string>
+        <string name="quarterly_performance">Quarterly Performance</string>
+
+
+
 </resources>

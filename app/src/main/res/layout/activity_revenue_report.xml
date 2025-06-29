@@ -24,17 +24,17 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_arrow_back"
-                android:tint="#FFFFFF"
                 android:clickable="true"
                 android:focusable="true"
                 android:background="?android:attr/selectableItemBackgroundBorderless"
-                android:padding="4dp" />
+                android:padding="4dp"
+                app:tint="#FFFFFF" />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Báo cáo Doanh thu"
+                android:text="@string/revenue_report_title"
                 android:textColor="#FFFFFF"
                 android:textSize="20sp"
                 android:textStyle="bold"
@@ -73,7 +73,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Tổng quan Doanh thu"
+                    android:text="@string/revenue_overview"
                     android:textColor="#9c162c"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -95,7 +95,7 @@
                             android:id="@+id/tvTotalRevenue"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0 VNĐ"
+                            android:text="@string/default_currency_value"
                             android:textColor="#9c162c"
                             android:textSize="18sp"
                             android:textStyle="bold" />
@@ -103,7 +103,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Tổng doanh thu"
+                            android:text="@string/total_revenue"
                             android:textColor="#666666"
                             android:textSize="12sp" />
 
@@ -120,7 +120,7 @@
                             android:id="@+id/tvAvgDailyRevenue"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0 VNĐ"
+                            android:text="@string/default_currency_value"
                             android:textColor="#9c162c"
                             android:textSize="18sp"
                             android:textStyle="bold" />
@@ -128,7 +128,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="TB hàng ngày"
+                            android:text="@string/daily_average"
                             android:textColor="#666666"
                             android:textSize="12sp" />
 
@@ -158,7 +158,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Phân loại Doanh thu"
+                    android:text="@strings/revenue_breakdown"
                     android:textColor="#9c162c"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -180,7 +180,7 @@
                             android:id="@+id/tvFlashsaleRevenue"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0 VNĐ"
+                            android:text="@strings/default_currency_value"
                             android:textColor="#FF5722"
                             android:textSize="16sp"
                             android:textStyle="bold" />
@@ -188,7 +188,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Doanh thu Flashsale"
+                            android:text="@strings/flashsale_revenue"
                             android:textColor="#666666"
                             android:textSize="12sp" />
 
@@ -205,7 +205,7 @@
                             android:id="@+id/tvNormalRevenue"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0 VNĐ"
+                            android:text="@string/default_currency_value"
                             android:textColor="#4CAF50"
                             android:textSize="16sp"
                             android:textStyle="bold" />
@@ -213,7 +213,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Doanh thu thường"
+                            android:text="@string/normal_revenue"
                             android:textColor="#666666"
                             android:textSize="12sp" />
 
@@ -243,7 +243,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Hiệu suất theo ngày"
+                    android:text="@string/daily_performance"
                     android:textColor="#9c162c"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -265,7 +265,7 @@
                             android:id="@+id/tvBestDay"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Chưa có dữ liệu"
+                            android:text="@string/no_data"
                             android:textColor="#4CAF50"
                             android:textSize="14sp"
                             android:textStyle="bold"
@@ -274,7 +274,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Ngày tốt nhất"
+                            android:text="@string/best_day"
                             android:textColor="#666666"
                             android:textSize="12sp" />
 
@@ -291,7 +291,7 @@
                             android:id="@+id/tvWorstDay"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Chưa có dữ liệu"
+                            android:text="@string/no_data"
                             android:textColor="#F44336"
                             android:textSize="14sp"
                             android:textStyle="bold"
@@ -300,7 +300,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Ngày thấp nhất"
+                            android:text="@string/worst_day"
                             android:textColor="#666666"
                             android:textSize="12sp" />
 
@@ -330,7 +330,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Tác động Voucher"
+                    android:text="@string/voucher_impact"
                     android:textColor="#9c162c"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -340,7 +340,7 @@
                     android:id="@+id/tvVoucherImpact"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Đang tải..."
+                    android:text="@string/loading_ellipsis"
                     android:textColor="#FF9800"
                     android:textSize="14sp"
                     android:gravity="center" />
@@ -367,7 +367,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Doanh thu hàng ngày"
+                    android:text="@string/daily_revenue_chart"
                     android:textColor="#9c162c"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -400,7 +400,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Doanh thu hàng tháng"
+                    android:text="@string/monthly_revenue_chart"
                     android:textColor="#9c162c"
                     android:textSize="16sp"
                     android:textStyle="bold"

@@ -24,17 +24,17 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_arrow_back"
-                android:tint="#FFFFFF"
                 android:clickable="true"
                 android:focusable="true"
                 android:background="?android:attr/selectableItemBackgroundBorderless"
-                android:padding="4dp" />
+                android:padding="4dp"
+                app:tint="#FFFFFF" />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Phân tích Xu hướng"
+                android:text="@string/trend_analysis_title"
                 android:textColor="#FFFFFF"
                 android:textSize="20sp"
                 android:textStyle="bold"
@@ -73,7 +73,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Tăng trưởng so với tháng trước"
+                    android:text="@string/growth_vs_last_month"
                     android:textColor="#9c162c"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -95,7 +95,7 @@
                             android:id="@+id/tvRevenueGrowth"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="+0%"
+                            android:text="@string/default_percentage"
                             android:textColor="#4CAF50"
                             android:textSize="20sp"
                             android:textStyle="bold" />
@@ -103,7 +103,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Doanh thu"
+                            android:text="@string/revenue"
                             android:textColor="#666666"
                             android:textSize="12sp" />
 
@@ -120,7 +120,7 @@
                             android:id="@+id/tvProfitGrowth"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="+0%"
+                            android:text="@string/default_percentage"
                             android:textColor="#4CAF50"
                             android:textSize="20sp"
                             android:textStyle="bold" />
@@ -128,7 +128,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Lợi nhuận"
+                            android:text="@string/profit"
                             android:textColor="#666666"
                             android:textSize="12sp" />
 
@@ -153,7 +153,7 @@
                             android:id="@+id/tvOrderGrowth"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="+0%"
+                            android:text="@string/default_percentage"
                             android:textColor="#4CAF50"
                             android:textSize="20sp"
                             android:textStyle="bold" />
@@ -161,7 +161,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Đơn hàng"
+                            android:text="@string/orders"
                             android:textColor="#666666"
                             android:textSize="12sp" />
 
@@ -178,7 +178,7 @@
                             android:id="@+id/tvMarginGrowth"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="+0%"
+                            android:text="@string/default_percentage"
                             android:textColor="#4CAF50"
                             android:textSize="20sp"
                             android:textStyle="bold" />
@@ -186,7 +186,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Tỷ suất"
+                            android:text="@string/margin"
                             android:textColor="#666666"
                             android:textSize="12sp" />
 
@@ -216,7 +216,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="So sánh tháng hiện tại vs tháng trước"
+                    android:text="@string/current_vs_last_month"
                     android:textColor="#9c162c"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -226,7 +226,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Tháng hiện tại"
+                    android:text="@string/current_month"
                     android:textColor="#9c162c"
                     android:textSize="14sp"
                     android:textStyle="bold"
@@ -249,7 +249,7 @@
                             android:id="@+id/tvCurrentMonthRevenue"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0 VNĐ"
+                            android:text="@string/default_currency_value"
                             android:textColor="#9c162c"
                             android:textSize="16sp"
                             android:textStyle="bold" />
@@ -257,7 +257,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Doanh thu"
+                            android:text="@string/revenue"
                             android:textColor="#666666"
                             android:textSize="12sp" />
 
@@ -274,7 +274,7 @@
                             android:id="@+id/tvCurrentMonthProfit"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0 VNĐ"
+                            android:text="@string/default_currency_value"
                             android:textColor="#9c162c"
                             android:textSize="16sp"
                             android:textStyle="bold" />
@@ -282,7 +282,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Lợi nhuận"
+                            android:text="@string/profit"
                             android:textColor="#666666"
                             android:textSize="12sp" />
 
@@ -299,7 +299,7 @@
                             android:id="@+id/tvCurrentMonthOrders"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0"
+                            android:text="@string/default_number"
                             android:textColor="#9c162c"
                             android:textSize="16sp"
                             android:textStyle="bold" />
@@ -307,7 +307,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Đơn hàng"
+                            android:text="@string/orders"
                             android:textColor="#666666"
                             android:textSize="12sp" />
 
@@ -319,7 +319,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Tháng trước"
+                    android:text="@string/last_month"
                     android:textColor="#9c162c"
                     android:textSize="14sp"
                     android:textStyle="bold"
@@ -341,7 +341,7 @@
                             android:id="@+id/tvLastMonthRevenue"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0 VNĐ"
+                            android:text="@string/default_currency_value"
                             android:textColor="#666666"
                             android:textSize="16sp"
                             android:textStyle="bold" />
@@ -349,7 +349,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Doanh thu"
+                            android:text="@string/revenue"
                             android:textColor="#666666"
                             android:textSize="12sp" />
 
@@ -366,7 +366,7 @@
                             android:id="@+id/tvLastMonthProfit"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0 VNĐ"
+                            android:text="@string/default_currency_value"
                             android:textColor="#666666"
                             android:textSize="16sp"
                             android:textStyle="bold" />
@@ -374,7 +374,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Lợi nhuận"
+                            android:text="@string/profit"
                             android:textColor="#666666"
                             android:textSize="12sp" />
 
@@ -391,7 +391,7 @@
                             android:id="@+id/tvLastMonthOrders"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0"
+                            android:text="@string/default_number"
                             android:textColor="#666666"
                             android:textSize="16sp"
                             android:textStyle="bold" />
@@ -399,7 +399,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Đơn hàng"
+                            android:text="@string/orders"
                             android:textColor="#666666"
                             android:textSize="12sp" />
 
@@ -429,7 +429,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Tóm tắt xu hướng"
+                    android:text="@string/trend_summary"
                     android:textColor="#9c162c"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -439,7 +439,7 @@
                     android:id="@+id/tvTrendSummary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Đang phân tích xu hướng kinh doanh..."
+                    android:text="@string/analyzing_business_trend"
                     android:textColor="#666666"
                     android:textSize="14sp"
                     android:lineSpacingExtra="4dp" />
@@ -466,7 +466,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Tăng trưởng theo quý"
+                    android:text="@string/quarterly_growth"
                     android:textColor="#9c162c"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -476,7 +476,7 @@
                     android:id="@+id/tvQuarterlyGrowth"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Đang tính toán..."
+                    android:text="@string/calculating"
                     android:textColor="#4CAF50"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -503,7 +503,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Dự báo cả năm"
+                    android:text="@string/yearly_forecast"
                     android:textColor="#9c162c"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -513,7 +513,7 @@
                     android:id="@+id/tvYearlyProjection"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Đang tính toán dự báo..."
+                    android:text="@string/calculating_forecast"
                     android:textColor="#FF9800"
                     android:textSize="14sp"
                     android:lineSpacingExtra="4dp" />
@@ -540,7 +540,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Phân tích chi phí"
+                    android:text="@string/cost_analysis"
                     android:textColor="#9c162c"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -550,7 +550,7 @@
                     android:id="@+id/tvCostAnalysis"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Đang phân tích chi phí..."
+                    android:text="@string/analyzing_cost"
                     android:textColor="#666666"
                     android:textSize="14sp" />
 
@@ -576,7 +576,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Khuyến nghị"
+                    android:text="@string/recommendations"
                     android:textColor="#9c162c"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -586,7 +586,7 @@
                     android:id="@+id/tvRecommendations"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Đang tạo khuyến nghị dựa trên xu hướng..."
+                    android:text="@string/generating_recommendations"
                     android:textColor="#666666"
                     android:textSize="14sp"
                     android:lineSpacingExtra="4dp" />
@@ -613,7 +613,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Biểu đồ xu hướng 6 tháng"
+                    android:text="@string/six_month_trend_chart"
                     android:textColor="#9c162c"
                     android:textSize="16sp"
                     android:textStyle="bold"

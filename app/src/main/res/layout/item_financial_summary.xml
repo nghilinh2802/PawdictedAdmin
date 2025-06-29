@@ -34,7 +34,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Tổng quan Tài chính"
+                android:text="@string/financial_overview_title"
                 android:textColor="#FFFFFF"
                 android:textSize="20sp"
                 android:textStyle="bold"
@@ -73,7 +73,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Tổng quan Tài chính"
+                    android:text="@string/financial_overview"
                     android:textColor="#9c162c"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -95,7 +95,7 @@
                             android:id="@+id/tvTotalRevenue"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0 VNĐ"
+                            android:text="@string/default_currency_value"
                             android:textColor="#9c162c"
                             android:textSize="16sp"
                             android:textStyle="bold" />
@@ -103,7 +103,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Tổng doanh thu"
+                            android:text="@string/total_revenue"
                             android:textColor="#666666"
                             android:textSize="12sp" />
 
@@ -120,7 +120,7 @@
                             android:id="@+id/tvTotalProfit"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0 VNĐ"
+                            android:text="@string/default_currency_value"
                             android:textColor="#9c162c"
                             android:textSize="16sp"
                             android:textStyle="bold" />
@@ -128,7 +128,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Tổng lợi nhuận"
+                            android:text="@string/total_profit"
                             android:textColor="#666666"
                             android:textSize="12sp" />
 
@@ -153,7 +153,7 @@
                             android:id="@+id/tvTotalOrders"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0"
+                            android:text="@string/default_number"
                             android:textColor="#9c162c"
                             android:textSize="16sp"
                             android:textStyle="bold" />
@@ -161,7 +161,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Tổng đơn hàng"
+                            android:text="@string/total_orders"
                             android:textColor="#666666"
                             android:textSize="12sp" />
 
@@ -178,7 +178,7 @@
                             android:id="@+id/tvAvgOrderValue"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0 VNĐ"
+                            android:text="@string/default_currency_value"
                             android:textColor="#9c162c"
                             android:textSize="16sp"
                             android:textStyle="bold" />
@@ -186,7 +186,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Giá trị TB/đơn"
+                            android:text="@string/avg_order_value"
                             android:textColor="#666666"
                             android:textSize="12sp" />
 
@@ -216,7 +216,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Chỉ số quan trọng"
+                    android:text="@string/key_metrics"
                     android:textColor="#9c162c"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -238,7 +238,7 @@
                             android:id="@+id/tvProfitMargin"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0%"
+                            android:text="@string/default_percentage"
                             android:textColor="#4CAF50"
                             android:textSize="18sp"
                             android:textStyle="bold" />
@@ -246,7 +246,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Tỷ suất lợi nhuận"
+                            android:text="@string/profit_margin"
                             android:textColor="#666666"
                             android:textSize="12sp" />
 
@@ -263,7 +263,7 @@
                             android:id="@+id/tvFlashsaleImpact"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0%"
+                            android:text="@string/default_percentage"
                             android:textColor="#FF5722"
                             android:textSize="18sp"
                             android:textStyle="bold" />
@@ -271,7 +271,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Tác động flashsale"
+                            android:text="@string/flashsale_impact"
                             android:textColor="#666666"
                             android:textSize="12sp" />
 
@@ -301,7 +301,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Phân tích kinh doanh"
+                    android:text="@string/business_analysis"
                     android:textColor="#9c162c"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -311,7 +311,7 @@
                     android:id="@+id/tvTopCategory"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Đang phân tích danh mục..."
+                    android:text="@string/analyzing_categories"
                     android:textColor="#666666"
                     android:textSize="14sp"
                     android:layout_marginBottom="8dp" />
@@ -320,7 +320,7 @@
                     android:id="@+id/tvBusinessHealth"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Đang đánh giá tình hình kinh doanh..."
+                    android:text="@string/evaluating_business_health"
                     android:textColor="#4CAF50"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -347,7 +347,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Tăng trưởng và Dự báo"
+                    android:text="@string/growth_and_projections"
                     android:textColor="#9c162c"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -357,7 +357,7 @@
                     android:id="@+id/tvQuarterlyGrowth"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Đang tính toán tăng trưởng quý..."
+                    android:text="@string/calculating_quarterly_growth"
                     android:textColor="#4CAF50"
                     android:textSize="14sp"
                     android:layout_marginBottom="8dp" />
@@ -366,7 +366,7 @@
                     android:id="@+id/tvYearlyProjection"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Đang tạo dự báo cả năm..."
+                    android:text="@string/creating_yearly_forecast"
                     android:textColor="#FF9800"
                     android:textSize="14sp" />
 
@@ -392,7 +392,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Phân tích Chi phí"
+                    android:text="@string/cost_analysis"
                     android:textColor="#9c162c"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -402,7 +402,7 @@
                     android:id="@+id/tvCostAnalysis"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Đang phân tích cấu trúc chi phí..."
+                    android:text="@string/analyzing_cost_structure"
                     android:textColor="#666666"
                     android:textSize="14sp" />
 
@@ -428,7 +428,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Khuyến nghị Kinh doanh"
+                    android:text="@string/business_recommendations"
                     android:textColor="#9c162c"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -438,7 +438,7 @@
                     android:id="@+id/tvRecommendations"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Đang tạo khuyến nghị dựa trên phân tích..."
+                    android:text="@string/generating_recommendations"
                     android:textColor="#666666"
                     android:textSize="14sp"
                     android:lineSpacingExtra="4dp" />
@@ -465,7 +465,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Phân tích Doanh thu"
+                    android:text="@string/revenue_analysis"
                     android:textColor="#9c162c"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -498,7 +498,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Lợi nhuận theo Danh mục"
+                    android:text="@string/profit_by_category"
                     android:textColor="#9c162c"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -531,7 +531,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Hiệu suất theo Quý"
+                    android:text="@string/quarterly_performance"
                     android:textColor="#9c162c"
                     android:textSize="16sp"
                     android:textStyle="bold"

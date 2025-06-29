@@ -97,4 +97,139 @@
     <string name="title_function_on_develop">Chức năng đang được phát triển. Vui lòng truy cập website!</string>
     <string name="you_have_no_permission">Bạn không có quyền truy cập!</string>
     <string name="logout">Đăng xuất</string>
+    <string name="title_analyze_business_performance">Phân tích hiệu suất kinh doanh</string>
+    <string name="average_value">Giá trị trung bình/đơn hàng</string>
+    <string name="revenue_trend_in_30days">Xu hướng doanh thu trong 30 ngày tới</string>
+    <string name="performance_by_category">Hiệu suất theo danh mục</string>
+    <string name="detail_infor">Thông tin chi tiết</string>
+    <string name="alert_stock">Running out of stock</string>
+    <string name="three_product_running_out">3 products is running out of stock</string>
+    <string name="most_popular_cate">Most Popular Category</string>
+    <string name="revenue_growth">Revenue Growth</string>
+    <string name="profit_growth">Profit Growth</string>
+    <string name="order_growth">Order Growth</string>
+    <string name="profit_margins_growth">Profit Margins Growth</string>
+    <string name="revenue_chart">Revenue Chart</string>
+    <string name="profit_chart">Profit Chart</string>
+    <string name="revenue_by_cate">Revenue by Category</string>
+    <string name="detail_report">Detail Report</string>
+    <string name="fs_and_nofs_compare">Detail Analyze Flashsale and Normal Revenue</string>
+    <string name="analyze_profit_by_cate_n_flashsale">Phân tích lợi nhuận theo danh mục và flashsale</string>
+    <string name="month_quarter_growth_trend">Monthly and quarterly growth trends</string>
+    <string name="finance_overview">Finance Overview</string>
+    <string name="summary">Comprehensive summary with insights and recommendations</string>
+    <string name="profit_report_title">Báo cáo Lợi nhuận</string>
+
+    <!-- Loading states -->
+    <string name="calculating">Đang tính toán</string>
+    <string name="loading_ellipsis">Đang tải...</string>
+    <string name="no_data">Chưa có dữ liệu</string>
+
+    <!-- Profit Summary Section -->
+    <string name="profit_overview">Tổng quan Lợi nhuận</string>
+    <string name="total_profit">Tổng lợi nhuận</string>
+    <string name="daily_average">TB hàng ngày</string>
+    <string name="profit_margin">Tỷ suất lợi nhuận</string>
+    <string name="best_profit_day">Ngày lợi nhuận cao nhất</string>
+
+    <!-- Profit Breakdown Section -->
+    <string name="profit_breakdown">Phân loại Lợi nhuận</string>
+    <string name="flashsale_profit">Lợi nhuận Flashsale</string>
+    <string name="normal_profit">Lợi nhuận thường</string>
+
+    <!-- Profit Impact Section -->
+    <string name="flashsale_impact">Tác động Flashsale</string>
+
+    <!-- Charts Section -->
+    <string name="daily_profit_chart">Lợi nhuận hàng ngày</string>
+    <string name="category_profit_chart">Lợi nhuận theo danh mục</string>
+        <!-- Header -->
+    <string name="revenue_report_title">Báo cáo Doanh thu</string>
+
+        <!-- Loading states -->
+
+    <string name="default_currency_value">0 VNĐ</string>
+
+    <!-- Revenue Summary Section -->
+    <string name="revenue_overview">Tổng quan Doanh thu</string>
+
+    <!-- Revenue Breakdown Section -->
+    <string name="revenue_breakdown">Phân loại Doanh thu</string>
+    <string name="flashsale_revenue">Doanh thu Flashsale</string>
+    <string name="normal_revenue">Doanh thu thường</string>
+
+    <!-- Daily Performance Section -->
+    <string name="daily_performance">Hiệu suất theo ngày</string>
+    <string name="best_day">Ngày tốt nhất</string>
+    <string name="worst_day">Ngày thấp nhất</string>
+
+    <!-- Voucher Impact Section -->
+    <string name="voucher_impact">Tác động Voucher</string>
+
+    <!-- Charts Section -->
+    <string name="daily_revenue_chart">Doanh thu hàng ngày</string>
+    <string name="monthly_revenue_chart">Doanh thu hàng tháng</string>
+        <!-- Header -->
+        <string name="trend_analysis_title">Phân tích Xu hướng</string>
+
+        <!-- Default values -->
+        <string name="default_percentage">+0%</string>
+
+        <string name="default_number">0</string>
+
+        <!-- Growth Section -->
+        <string name="growth_vs_last_month">Tăng trưởng so với tháng trước</string>
+        <string name="margin">Tỷ suất</string>
+
+        <!-- Comparison Section -->
+        <string name="current_vs_last_month">So sánh tháng hiện tại vs tháng trước</string>
+        <string name="current_month">Tháng hiện tại</string>
+        <string name="last_month">Tháng trước</string>
+
+        <!-- Analysis Sections -->
+        <string name="trend_summary">Tóm tắt xu hướng</string>
+        <string name="analyzing_business_trend">Đang phân tích xu hướng kinh doanh...</string>
+
+        <string name="quarterly_growth">Tăng trưởng theo quý</string>
+
+        <string name="yearly_forecast">Dự báo cả năm</string>
+        <string name="calculating_forecast">Đang tính toán dự báo...</string>
+
+        <string name="cost_analysis">Phân tích chi phí</string>
+        <string name="analyzing_cost">Đang phân tích chi phí...</string>
+
+        <string name="recommendations">Khuyến nghị</string>
+        <string name="generating_recommendations">Đang tạo khuyến nghị dựa trên xu hướng...</string>
+
+        <!-- Chart Section -->
+        <string name="six_month_trend_chart">Biểu đồ xu hướng 6 tháng</string>
+        <!-- Header -->
+        <string name="financial_overview_title">Tổng quan Tài chính</string>
+        <string name="financial_overview">Tổng quan Tài chính</string>
+        <string name="total_orders">Tổng đơn hàng</string>
+        <string name="avg_order_value">Giá trị TB/đơn</string>
+
+        <!-- Key Metrics Section -->
+        <string name="key_metrics">Chỉ số quan trọng</string>
+
+        <!-- Business Analysis Section -->
+        <string name="business_analysis">Phân tích kinh doanh</string>
+        <string name="analyzing_categories">Đang phân tích danh mục...</string>
+        <string name="evaluating_business_health">Đang đánh giá tình hình kinh doanh...</string>
+
+        <!-- Growth & Projections Section -->
+        <string name="growth_and_projections">Tăng trưởng và Dự báo</string>
+        <string name="calculating_quarterly_growth">Đang tính toán tăng trưởng quý...</string>
+        <string name="creating_yearly_forecast">Đang tạo dự báo cả năm...</string>
+
+        <!-- Cost Analysis Section -->
+        <string name="analyzing_cost_structure">Đang phân tích cấu trúc chi phí...</string>
+
+        <!-- Recommendations Section -->
+        <string name="business_recommendations">Khuyến nghị Kinh doanh</string>
+        <string name="revenue_analysis">Phân tích Doanh thu</string>
+        <string name="profit_by_category">Lợi nhuận theo Danh mục</string>
+        <string name="quarterly_performance">Hiệu suất theo Quý</string>
+
+
 </resources>
