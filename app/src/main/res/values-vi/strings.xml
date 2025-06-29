@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Quản trị Paw\'dicted</string>
-    <string name="dashboard_title">Bảng điều khiển Paw\'dicted</string>
+    <string name="app_name">PawdictedAdmin</string>
+    <string name="dashboard_title">Bảng điều khiển Pawdicted</string>
     <string name="revenue">Doanh thu</string>
     <string name="orders">Đơn hàng</string>
     <string name="products">Sản phẩm</string>
