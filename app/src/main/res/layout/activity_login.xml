@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f8f1f1"
+    tools:context=".LoginActivity">
+
+    <!-- Nội dung giao diện chính -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="16dp">
+
+        <!-- Logo -->
+        <ImageView
+            android:layout_width="345dp"
+            android:layout_height="280dp"
+            android:layout_marginTop="60dp"
+            android:contentDescription="Login Logo"
+            android:src="@mipmap/ic_logo" />
+
+        <!-- Title -->
+        <TextView
+            android:id="@+id/txtLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/title_login_login"
+            android:textColor="#9c162c"
+            android:textSize="28sp"
+            android:textStyle="bold" />
+
+        <!-- Phone Field -->
+        <EditText
+            android:id="@+id/edtEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="13dp"
+            android:layout_marginEnd="32dp"
+            android:background="@drawable/rounded_edittext_red"
+            android:drawableStart="@mipmap/ic_email"
+            android:drawablePadding="8dp"
+            android:hint="Email"
+            android:inputType="textEmailAddress"
+            android:padding="16dp"
+            android:textColorHint="#777777"
+            android:textSize="16sp" />
+
+        <!-- Password Field -->
+        <EditText
+            android:id="@+id/edtPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="13dp"
+            android:layout_marginEnd="32dp"
+            android:background="@drawable/rounded_edittext_red"
+            android:drawableStart="@mipmap/ic_password"
+            android:drawablePadding="8dp"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:padding="15dp"
+            android:textColorHint="#777777"
+            android:textSize="16sp" />
+
+        <!-- Remember Me and Forgot Password -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginTop="5dp"
+            android:gravity="center_vertical">
+
+            <CheckBox
+                android:id="@+id/ckbRememberInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:buttonTint="#9c162c"
+                android:text="@string/title_remember_me"
+                 />
+
+
+        </LinearLayout>
+
+        <!-- Login Button -->
+        <Button
+            android:id="@+id/btnLogin"
+            android:layout_width="186dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="32dp"
+            android:background="@drawable/rounded_login_button"
+            android:padding="10dp"
+            android:text="@string/title_login_login"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            app:backgroundTint="#9c162c" />
+
+
+    </LinearLayout>
+
+    <!-- Overlay and ProgressBar -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true">
+
+        <View
+            android:id="@+id/overlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#80000000"
+            android:visibility="gone" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:indeterminateTint="#9c162c"
+            android:visibility="gone" />
+    </FrameLayout>
+</RelativeLayout>

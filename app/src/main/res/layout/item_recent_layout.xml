@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="3dp"
+    android:id="@+id/cardIcon"
+    app:cardBackgroundColor="#FFFFFF"
+    android:foreground="?attr/selectableItemBackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:gravity="center_vertical">
+
+        <!-- Activity Icon Container -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            app:cardCornerRadius="24dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="#fee2e2">
+
+            <ImageView
+                android:id="@+id/imgActivityIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:tint="#9c162c"
+                tools:src="@drawable/ic_shopping_cart" />
+        </androidx.cardview.widget.CardView>
+
+        <!-- Activity Content -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="16dp">
+
+            <TextView
+                android:id="@+id/txtActivityTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#1e293b"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-condensed"
+                android:maxLines="2"
+                android:ellipsize="end"
+                tools:text="Đơn hàng mới #12345" />
+
+            <TextView
+                android:id="@+id/txtActivityDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#64748b"
+                android:textSize="13sp"
+                android:fontFamily="sans-serif"
+                android:layout_marginTop="4dp"
+                android:maxLines="2"
+                android:ellipsize="end"
+                tools:text="Khách hàng: Nguyễn Thị B - 2.500.000đ" />
+        </LinearLayout>
+
+        <!-- Time and Status Container -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="end"
+            android:layout_marginStart="12dp">
+
+            <TextView
+                android:id="@+id/txtActivityTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#64748b"
+                android:textSize="12sp"
+                android:fontFamily="sans-serif"
+                tools:text="5 phút" />
+
+            <!-- Optional Status Badge -->
+            <TextView
+                android:id="@+id/txtActivityStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-condensed"
+                android:background="@drawable/status_badge_bg"
+                android:visibility="gone"
+                tools:text="MỚI"
+                tools:visibility="visible"
+                tools:textColor="#FFFFFF"
+                tools:backgroundTint="#ef4444" />
+        </LinearLayout>
+
+        <!-- Optional Action Button -->
+        <ImageView
+            android:id="@+id/btnActivityAction"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_arrow_forward"
+            android:tint="#9c162c"
+            android:layout_marginStart="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="2dp"
+            android:contentDescription="@string/view_details"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+    </LinearLayout>
+
+    <!-- Optional Priority Indicator -->
+    <View
+        android:id="@+id/viewPriorityIndicator"
+        android:layout_width="4dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="#9c162c"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+</androidx.cardview.widget.CardView>

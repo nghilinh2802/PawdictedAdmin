@@ -16,6 +16,39 @@
         android:theme="@style/Theme.PawdictedAdmin"
         tools:targetApi="31">
         <activity
+            android:name=".SettingManagementActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AllActivitiesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ProductManagementActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RoleManagementActivity"
+            android:exported="false" />
+        <activity
+            android:name=".OrderManagementActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CustomerServiceActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ChatActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AdminDashboardActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LoginActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".TrendAnalysisActivity"
             android:exported="false" />
         <activity
@@ -32,17 +65,10 @@
             android:exported="false" />
         <activity
             android:name=".FinancialDashboardActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:exported="true" />
         <activity
             android:name=".MainActivity"
-            android:exported="true"/>
-
+            android:exported="true" />
     </application>
 
 </manifest>
