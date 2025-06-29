@@ -9,10 +9,10 @@
             android:id="@+id/nav_settings"
             android:icon="@mipmap/ic_setting"
             android:iconTint="#9c162c"
-            android:title="Settings" />
+            android:title="@string/settings" />
         <item
             android:id="@+id/nav_logout"
             android:icon="@mipmap/ic_logout"
-            android:title="Logout" />
+            android:title="@string/logout" />
     </group>
 </menu>

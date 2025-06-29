@@ -101,7 +101,7 @@ public class LoginActivity extends AppCompatActivity {
                     if (!"Admin".equalsIgnoreCase(role) && !"Staff".equalsIgnoreCase(role)) {
                         progressBar.setVisibility(View.GONE);
                         overlay.setVisibility(View.GONE);
-                        Toast.makeText(this, "Bạn không có quyền", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, R.string.you_have_no_permission, Toast.LENGTH_SHORT).show();
                         return;
                     }
 
