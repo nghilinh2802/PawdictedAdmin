@@ -116,7 +116,7 @@
     <string name="month_quarter_growth_trend">Monthly and quarterly growth trends</string>
     <string name="finance_overview">Finance Overview</string>
     <string name="summary">Comprehensive summary with insights and recommendations</string>
-    <string name="profit_report_title">Profile report</string>
+    <string name="profit_report_title">Profit report</string>
 
     <string name="calculating">Calculating</string>
     <string name="loading_ellipsis">Loading...</string>
