@@ -147,8 +147,20 @@ public class ChatRoom {
     private long getLastMessageTime(List<Map<String, Object>> messages) {
         if (messages == null || messages.isEmpty()) return 0;
         Object time = messages.get(messages.size() - 1).get("time");
-        return time instanceof Long ? (Long) time : 0;
+
+        // Handle different time formats
+        if (time instanceof Long) {
+            return (Long) time;
+        } else if (time instanceof com.google.firebase.Timestamp) {
+            com.google.firebase.Timestamp timestamp = (com.google.firebase.Timestamp) time;
+            return timestamp.toDate().getTime();
+        } else if (time instanceof Integer) {
+            return ((Integer) time).longValue();
+        }
+
+        return 0;
     }
+
 
     public int getUnreadCount() {
         return customerSent != null ? customerSent.size() : 0;
