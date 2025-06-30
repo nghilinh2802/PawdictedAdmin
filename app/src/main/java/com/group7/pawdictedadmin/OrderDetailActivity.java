@@ -105,10 +105,11 @@ public class OrderDetailActivity extends AppCompatActivity {
                             parseOrderData(document);
                             updateBasicOrderInfo();
 
-                            // Load customer details
+                            // Load customer details với logic mới
                             String customerId = document.getString("customer_id");
+                            String addressId = document.getString("address_id");
                             if (customerId != null) {
-                                loadCustomerDetails(customerId);
+                                loadCustomerDetailsWithAddress(customerId, addressId);
                             }
 
                             // Load order items
@@ -163,25 +164,95 @@ public class OrderDetailActivity extends AppCompatActivity {
         currentOrder.setOrderItemId(orderItemId);
     }
 
-    private void loadCustomerDetails(String customerId) {
+    // Phương thức mới để load customer details với address logic
+    private void loadCustomerDetailsWithAddress(String customerId, String addressId) {
+        // Khởi tạo thông tin mặc định
+        Order.Customer customer = new Order.Customer();
+        customer.setName("[Không rõ tên]");
+        customer.setPhone("[Không rõ số]");
+        customer.setAddress("[Không rõ địa chỉ]");
+
+        // Bước 1: Thử lấy từ addresses collection trước (như Angular)
+        if (customerId != null && addressId != null && !addressId.isEmpty()) {
+            db.collection("addresses")
+                    .document(customerId)
+                    .collection("items")
+                    .document(addressId)
+                    .get()
+                    .addOnCompleteListener(addressTask -> {
+                        if (addressTask.isSuccessful() && addressTask.getResult().exists()) {
+                            DocumentSnapshot addressDoc = addressTask.getResult();
+
+                            // Lấy thông tin từ address document
+                            String name = addressDoc.getString("name");
+                            String phone = addressDoc.getString("phone");
+                            String address = addressDoc.getString("address");
+
+                            if (name != null) customer.setName(name);
+                            if (phone != null) customer.setPhone(phone);
+                            if (address != null) customer.setAddress(address);
+
+                            currentOrder.setCustomer(customer);
+                            updateCustomerInfo();
+
+                            Log.d(TAG, "Customer info loaded from addresses collection");
+                        } else {
+                            // Fallback: Nếu không có trong addresses, lấy từ customers
+                            Log.d(TAG, "Address not found, falling back to customers collection");
+                            loadCustomerFromCustomersCollection(customerId, customer);
+                        }
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.w(TAG, "Error loading from addresses, falling back to customers", e);
+                        loadCustomerFromCustomersCollection(customerId, customer);
+                    });
+        } else {
+            // Nếu không có addressId, lấy trực tiếp từ customers
+            Log.d(TAG, "No addressId provided, loading from customers collection");
+            loadCustomerFromCustomersCollection(customerId, customer);
+        }
+    }
+
+    // Phương thức phụ để load từ customers collection
+    private void loadCustomerFromCustomersCollection(String customerId, Order.Customer customer) {
+        if (customerId == null) {
+            currentOrder.setCustomer(customer);
+            updateCustomerInfo();
+            return;
+        }
+
         db.collection("customers").document(customerId)
                 .get()
                 .addOnCompleteListener(customerTask -> {
                     if (customerTask.isSuccessful() && customerTask.getResult().exists()) {
                         DocumentSnapshot customerDoc = customerTask.getResult();
-                        Order.Customer customer = new Order.Customer();
-                        customer.setName(customerDoc.getString("customer_name"));
-                        customer.setPhone(customerDoc.getString("phone_number"));
-                        customer.setAddress(customerDoc.getString("address"));
-                        customer.setAvatarImg(customerDoc.getString("avatar_img"));
-                        currentOrder.setCustomer(customer);
 
-                        updateCustomerInfo();
+                        // Chỉ cập nhật nếu thông tin hiện tại vẫn là mặc định
+                        if (customer.getName().equals("[Không rõ tên]")) {
+                            String customerName = customerDoc.getString("customer_name");
+                            if (customerName != null) customer.setName(customerName);
+                        }
+
+                        if (customer.getPhone().equals("[Không rõ số]")) {
+                            String phoneNumber = customerDoc.getString("phone_number");
+                            if (phoneNumber != null) customer.setPhone(phoneNumber);
+                        }
+
+                        if (customer.getAddress().equals("[Không rõ địa chỉ]")) {
+                            String address = customerDoc.getString("address");
+                            if (address != null) customer.setAddress(address);
+                        }
+
+                        // Set avatar if available
+                        customer.setAvatarImg(customerDoc.getString("avatar_img"));
+
+                        Log.d(TAG, "Customer info loaded from customers collection");
                     } else {
                         Log.e(TAG, "Error fetching customer details", customerTask.getException());
-                        // Set default customer info
-                        updateCustomerInfo();
                     }
+
+                    currentOrder.setCustomer(customer);
+                    updateCustomerInfo();
                 });
     }
 
@@ -407,6 +478,7 @@ public class OrderDetailActivity extends AppCompatActivity {
         Map<String, Object> updates = new HashMap<>();
         updates.put("order_status", "Shipped");
         updates.put("updated_at", new Date());
+        updates.put("ship_time", new Date());
 
         db.collection("orders").document(orderId)
                 .update(updates)
@@ -416,11 +488,15 @@ public class OrderDetailActivity extends AppCompatActivity {
                         currentOrder.setStatus("Shipped");
                         btnConfirmOrder.setVisibility(View.GONE);
 
-                        // Set result to refresh the previous activity
+                        // Set result để báo cho OrderManagement activity biết cần refresh
                         Intent resultIntent = new Intent();
                         resultIntent.putExtra("ORDER_ID", orderId);
                         resultIntent.putExtra("NEW_STATUS", "Shipped");
+                        resultIntent.putExtra("REFRESH_NEEDED", true); // Flag để báo cần refresh
                         setResult(RESULT_OK, resultIntent);
+
+                        // Tự động quay lại OrderManagement activity
+                        finish();
 
                     } else {
                         Log.e(TAG, "Error updating order status", task.getException());
