@@ -217,22 +217,32 @@ public class RevenueReportActivity extends AppCompatActivity {
                         String flashsaleName = flashsaleDoc.getString("flashSale_name");
                         List<Map<String, Object>> products = (List<Map<String, Object>>) flashsaleDoc.get("products");
 
-                        Log.d(TAG, String.format("Processing flashsale: %s (Start: %d, End: %d)",
-                                flashsaleName, startTime, endTime));
+                        // Tạo final variables cho lambda
+                        final Long finalStartTime = startTime;
+                        final Long finalEndTime = endTime;
+                        final String finalFlashsaleName = flashsaleName;
 
-                        if (products != null && startTime != null && endTime != null) {
+                        Log.d(TAG, String.format("Processing flashsale: %s (Start: %d, End: %d)",
+                                finalFlashsaleName, finalStartTime, finalEndTime));
+
+                        if (products != null && finalStartTime != null && finalEndTime != null) {
                             for (Map<String, Object> product : products) {
                                 String productId = (String) product.get("product_id");
                                 Object discountRateObj = product.get("discountRate");
 
-                                if (productId != null && discountRateObj != null) {
+                                // Tạo final variables cho lambda
+                                final String finalProductId = productId;
+
+                                if (finalProductId != null && discountRateObj != null) {
                                     double discountRate = (discountRateObj instanceof Long) ?
                                             ((Long) discountRateObj).doubleValue() : (Double) discountRateObj;
 
-                                    Log.d(TAG, String.format("Processing flashsale product: %s (Discount: %.2f%%)",
-                                            productId, discountRate));
+                                    final double finalDiscountRate = discountRate;
 
-                                    db.collection("products").document(productId)
+                                    Log.d(TAG, String.format("Processing flashsale product: %s (Discount: %.2f%%)",
+                                            finalProductId, finalDiscountRate));
+
+                                    db.collection("products").document(finalProductId)
                                             .get()
                                             .addOnSuccessListener(productDoc -> {
                                                 if (productDoc.exists()) {
@@ -241,16 +251,16 @@ public class RevenueReportActivity extends AppCompatActivity {
 
                                                     if (originalPrice != null) {
                                                         FlashsaleInfo info = new FlashsaleInfo();
-                                                        info.productId = productId;
-                                                        info.discountRate = discountRate;
-                                                        info.startTime = startTime;
-                                                        info.endTime = endTime;
+                                                        info.productId = finalProductId;
+                                                        info.discountRate = finalDiscountRate;
+                                                        info.startTime = finalStartTime;
+                                                        info.endTime = finalEndTime;
                                                         info.originalPrice = originalPrice;
 
-                                                        flashsaleCache.put(productId, info);
+                                                        flashsaleCache.put(finalProductId, info);
 
                                                         Log.d(TAG, String.format("Cached flashsale info - Product: %s (%s), Discount: %.2f%%",
-                                                                productName, productId, discountRate));
+                                                                productName, finalProductId, finalDiscountRate));
                                                     }
                                                 }
 
@@ -261,7 +271,7 @@ public class RevenueReportActivity extends AppCompatActivity {
                                                 }
                                             })
                                             .addOnFailureListener(e -> {
-                                                Log.e(TAG, "Error loading product: " + productId, e);
+                                                Log.e(TAG, "Error loading product: " + finalProductId, e);
                                                 if (processedProducts.incrementAndGet() >= totalProducts.get()) {
                                                     onComplete.run();
                                                 }
@@ -297,7 +307,7 @@ public class RevenueReportActivity extends AppCompatActivity {
     }
 
     private void analyzeRevenue() {
-        Log.d(TAG, "=== STARTING REVENUE ANALYSIS ===");
+        Log.d(TAG, "=== STARTING REVENUE ANALYSIS WITH CORRECTED LOGIC ===");
 
         db.collection("orders")
                 .whereEqualTo("order_status", "Completed")
@@ -314,46 +324,16 @@ public class RevenueReportActivity extends AppCompatActivity {
 
                     totalOrdersToProcess = orderSnapshot.size();
 
-                    // Calculate total revenue from order_value and group by date/month
-                    double totalOrderValue = 0;
+                    // THAY ĐỔI: Tính doanh thu từ total_cost_of_goods thay vì order_value
                     for (QueryDocumentSnapshot orderDoc : orderSnapshot) {
-                        Double orderValue = orderDoc.getDouble("order_value");
                         Object orderTimeObj = orderDoc.get("order_time");
 
-                        if (orderValue != null) {
-                            totalOrderValue += orderValue;
+                        // Group by date and month for chart data
+                        String dateKey = extractDateKey(orderTimeObj);
+                        String monthKey = extractMonthKey(orderTimeObj);
 
-                            // Group by date and month
-                            String dateKey = extractDateKey(orderTimeObj);
-                            String monthKey = extractMonthKey(orderTimeObj);
-
-                            if (dateKey != null) {
-                                dailyRevenueData.merge(dateKey, orderValue, Double::sum);
-
-                                // Track best and worst days
-                                double dayRevenue = dailyRevenueData.get(dateKey);
-                                if (dayRevenue > bestDayRevenue.get()) {
-                                    bestDayRevenue.set(dayRevenue);
-                                    bestDayDate.set(dateKey);
-                                }
-                                if (dayRevenue < worstDayRevenue.get()) {
-                                    worstDayRevenue.set(dayRevenue);
-                                    worstDayDate.set(dateKey);
-                                }
-                            }
-
-                            if (monthKey != null) {
-                                monthlyRevenueData.merge(monthKey, orderValue, Double::sum);
-                            }
-                        }
-                    }
-                    totalRevenue.set(totalOrderValue);
-
-                    Log.d(TAG, String.format("Total revenue calculated: %.2f from %d orders", totalOrderValue, totalOrdersToProcess));
-
-                    // Analyze each order for flashsale/normal classification
-                    for (QueryDocumentSnapshot orderDoc : orderSnapshot) {
-                        analyzeOrderRevenue(orderDoc);
+                        // Analyze each order for revenue calculation
+                        analyzeOrderRevenueFromItems(orderDoc, dateKey, monthKey);
                     }
                 })
                 .addOnFailureListener(e -> {
@@ -362,47 +342,221 @@ public class RevenueReportActivity extends AppCompatActivity {
                 });
     }
 
-    private void analyzeOrderRevenue(QueryDocumentSnapshot orderDoc) {
+    private void analyzeOrderRevenueFromItems(QueryDocumentSnapshot orderDoc, String dateKey, String monthKey) {
         String orderId = orderDoc.getId();
         String orderItemId = orderDoc.getString("order_item_id");
         Double orderValue = orderDoc.getDouble("order_value");
+        Double shippingFee = orderDoc.getDouble("shipping_fee");
 
-        Log.d(TAG, String.format("=== ANALYZING ORDER REVENUE ==="));
-        Log.d(TAG, String.format("Order ID: %s", orderId));
-        Log.d(TAG, String.format("Order Value: %.2f", orderValue != null ? orderValue : 0));
-        Log.d(TAG, String.format("Order Item ID: %s", orderItemId));
+        // Tạo final variables cho lambda
+        final String finalOrderId = orderId;
+        final String finalOrderItemId = orderItemId;
+        final Double finalOrderValue = orderValue;
+        final Double finalShippingFee = shippingFee;
+        final String finalDateKey = dateKey;
+        final String finalMonthKey = monthKey;
 
-        if (orderItemId == null) {
-            Log.e(TAG, "❌ Order item ID is null for order: " + orderId);
+        Log.d(TAG, String.format("=== ANALYZING ORDER REVENUE FROM ITEMS ==="));
+        Log.d(TAG, String.format("Order ID: %s", finalOrderId));
+        Log.d(TAG, String.format("Order Value: %.2f, Shipping: %.2f",
+                finalOrderValue != null ? finalOrderValue : 0, finalShippingFee != null ? finalShippingFee : 0));
+
+        if (finalOrderItemId == null) {
+            Log.e(TAG, "❌ Order item ID is null for order: " + finalOrderId);
+
+            // Fallback: dùng order_value - shipping_fee
+            double fallbackRevenue = calculateFallbackRevenue(finalOrderValue, finalShippingFee);
+            updateRevenueData(fallbackRevenue, finalDateKey, finalMonthKey);
             checkAnalysisComplete();
             return;
         }
 
-        db.collection("order_items").document(orderItemId)
+        db.collection("order_items").document(finalOrderItemId)
                 .get()
                 .addOnSuccessListener(orderItemDoc -> {
                     if (orderItemDoc.exists()) {
-                        Log.d(TAG, "✅ Order_items document exists");
-
-                        // FIX: Đọc products từ fields thay vì array
                         List<Map<String, Object>> products = extractProductsFromFields(orderItemDoc);
 
                         if (products != null && !products.isEmpty()) {
-                            Log.d(TAG, String.format("✅ Found %d products in order %s", products.size(), orderId));
-                            classifyOrderRevenue(orderId, products);
+                            calculateOrderRevenueFromProducts(finalOrderId, products, finalOrderValue,
+                                    finalShippingFee, finalDateKey, finalMonthKey);
                         } else {
-                            Log.e(TAG, "❌ No products found in order_items: " + orderItemId);
+                            // Fallback: dùng order_value - shipping_fee
+                            double fallbackRevenue = calculateFallbackRevenue(finalOrderValue, finalShippingFee);
+                            updateRevenueData(fallbackRevenue, finalDateKey, finalMonthKey);
                             checkAnalysisComplete();
                         }
                     } else {
-                        Log.e(TAG, "❌ Order_items document not found: " + orderItemId);
+                        // Fallback: dùng order_value - shipping_fee
+                        double fallbackRevenue = calculateFallbackRevenue(finalOrderValue, finalShippingFee);
+                        updateRevenueData(fallbackRevenue, finalDateKey, finalMonthKey);
                         checkAnalysisComplete();
                     }
                 })
                 .addOnFailureListener(e -> {
-                    Log.e(TAG, "❌ Error loading order_items: " + orderItemId, e);
+                    Log.e(TAG, "❌ Error loading order_items: " + finalOrderItemId, e);
+
+                    // Fallback: dùng order_value - shipping_fee
+                    double fallbackRevenue = calculateFallbackRevenue(finalOrderValue, finalShippingFee);
+                    updateRevenueData(fallbackRevenue, finalDateKey, finalMonthKey);
                     checkAnalysisComplete();
                 });
+    }
+
+    private void calculateOrderRevenueFromProducts(String orderId, List<Map<String, Object>> products,
+                                                   Double orderValue, Double shippingFee,
+                                                   String dateKey, String monthKey) {
+
+        Log.d(TAG, String.format("=== CALCULATING REVENUE FROM PRODUCTS FOR ORDER %s ===", orderId));
+
+        final AtomicReference<Double> orderRevenue = new AtomicReference<>(0.0);
+        final AtomicReference<Double> orderFlashsaleRevenue = new AtomicReference<>(0.0);
+        final AtomicReference<Double> orderNormalRevenue = new AtomicReference<>(0.0);
+        final AtomicInteger processedProducts = new AtomicInteger(0);
+        final int totalProducts = products.size();
+
+        // Tạo final variables cho lambda
+        final String finalOrderId = orderId;
+        final Double finalOrderValue = orderValue;
+        final Double finalShippingFee = shippingFee;
+        final String finalDateKey = dateKey;
+        final String finalMonthKey = monthKey;
+
+        for (Map<String, Object> product : products) {
+            String productId = (String) product.get("product_id");
+            Object totalCostObj = product.get("total_cost_of_goods");
+
+            if (productId == null || totalCostObj == null) {
+                Log.w(TAG, String.format("❌ Missing data for product: ID=%s, TotalCost=%s", productId, totalCostObj));
+                if (processedProducts.incrementAndGet() >= totalProducts) {
+                    finalizeOrderRevenue(finalOrderId, orderRevenue.get(), orderFlashsaleRevenue.get(),
+                            orderNormalRevenue.get(), finalOrderValue, finalShippingFee,
+                            finalDateKey, finalMonthKey);
+                }
+                continue;
+            }
+
+            double totalCostOfGoods = (totalCostObj instanceof Long) ?
+                    ((Long) totalCostObj).doubleValue() : (Double) totalCostObj;
+
+            // Cộng vào tổng doanh thu của order
+            orderRevenue.updateAndGet(v -> v + totalCostOfGoods);
+
+            // Phân loại flashsale vs normal
+            boolean isInFlashsale = isProductInActiveFlashsale(productId);
+
+            if (isInFlashsale) {
+                orderFlashsaleRevenue.updateAndGet(v -> v + totalCostOfGoods);
+                Log.d(TAG, String.format("✅ FLASHSALE REVENUE: %s = %.2f", productId, totalCostOfGoods));
+            } else {
+                orderNormalRevenue.updateAndGet(v -> v + totalCostOfGoods);
+                Log.d(TAG, String.format("✅ NORMAL REVENUE: %s = %.2f", productId, totalCostOfGoods));
+            }
+
+            if (processedProducts.incrementAndGet() >= totalProducts) {
+                finalizeOrderRevenue(finalOrderId, orderRevenue.get(), orderFlashsaleRevenue.get(),
+                        orderNormalRevenue.get(), finalOrderValue, finalShippingFee,
+                        finalDateKey, finalMonthKey);
+            }
+        }
+    }
+
+    private double calculateFallbackRevenue(Double orderValue, Double shippingFee) {
+        if (orderValue == null) {
+            return 0.0;
+        }
+
+        double revenue = orderValue;
+
+        // Trừ shipping fee nếu có
+        if (shippingFee != null && shippingFee > 0) {
+            revenue -= shippingFee;
+            Log.d(TAG, String.format("Fallback revenue: %.2f - %.2f = %.2f",
+                    orderValue, shippingFee, revenue));
+        }
+
+        return Math.max(revenue, 0); // Đảm bảo không âm
+    }
+
+    private void finalizeOrderRevenue(String orderId, double orderRevenue, double orderFlashsaleRevenue,
+                                      double orderNormalRevenue, Double orderValue, Double shippingFee,
+                                      String dateKey, String monthKey) {
+
+        Log.d(TAG, "=== FINALIZING ORDER REVENUE ===");
+        Log.d(TAG, String.format("Order ID: %s", orderId));
+        Log.d(TAG, String.format("Revenue from products: %.2f", orderRevenue));
+        Log.d(TAG, String.format("Flashsale revenue: %.2f", orderFlashsaleRevenue));
+        Log.d(TAG, String.format("Normal revenue: %.2f", orderNormalRevenue));
+
+        // Sử dụng doanh thu từ products làm chính
+        double finalRevenue = orderRevenue;
+
+        // Tạo final variables cho lambda
+        final double finalFlashsaleRevenue;
+        final double finalNormalRevenue;
+
+        // Nếu không có revenue từ products, dùng fallback
+        if (orderRevenue <= 0) {
+            finalRevenue = calculateFallbackRevenue(orderValue, shippingFee);
+
+            // Phân chia fallback revenue theo tỷ lệ hiện tại
+            double totalClassified = flashsaleRevenue.get() + normalRevenue.get();
+            if (totalClassified > 0) {
+                double flashsaleRatio = flashsaleRevenue.get() / totalClassified;
+                finalFlashsaleRevenue = finalRevenue * flashsaleRatio;
+                finalNormalRevenue = finalRevenue * (1 - flashsaleRatio);
+            } else {
+                // Mặc định 30% flashsale, 70% normal
+                finalFlashsaleRevenue = finalRevenue * 0.3;
+                finalNormalRevenue = finalRevenue * 0.7;
+            }
+
+            Log.w(TAG, String.format("Using fallback revenue: %.2f", finalRevenue));
+        } else {
+            // Sử dụng giá trị từ products
+            finalFlashsaleRevenue = orderFlashsaleRevenue;
+            finalNormalRevenue = orderNormalRevenue;
+        }
+
+        // Cập nhật dữ liệu global
+        updateRevenueData(finalRevenue, dateKey, monthKey);
+
+        // Cập nhật phân loại flashsale/normal với final variables
+        flashsaleRevenue.updateAndGet(v -> v + finalFlashsaleRevenue);
+        normalRevenue.updateAndGet(v -> v + finalNormalRevenue);
+
+        Log.d(TAG, String.format("Final revenue used: %.2f", finalRevenue));
+        Log.d(TAG, String.format("Final flashsale revenue: %.2f", finalFlashsaleRevenue));
+        Log.d(TAG, String.format("Final normal revenue: %.2f", finalNormalRevenue));
+
+        checkAnalysisComplete();
+    }
+
+
+    private void updateRevenueData(double revenue, String dateKey, String monthKey) {
+        // Cập nhật tổng doanh thu
+        totalRevenue.updateAndGet(v -> v + revenue);
+
+        // Cập nhật dữ liệu theo ngày
+        if (dateKey != null) {
+            dailyRevenueData.merge(dateKey, revenue, Double::sum);
+
+            // Track best and worst days
+            double dayRevenue = dailyRevenueData.get(dateKey);
+            if (dayRevenue > bestDayRevenue.get()) {
+                bestDayRevenue.set(dayRevenue);
+                bestDayDate.set(dateKey);
+            }
+            if (dayRevenue < worstDayRevenue.get()) {
+                worstDayRevenue.set(dayRevenue);
+                worstDayDate.set(dateKey);
+            }
+        }
+
+        // Cập nhật dữ liệu theo tháng
+        if (monthKey != null) {
+            monthlyRevenueData.merge(monthKey, revenue, Double::sum);
+        }
     }
 
     private List<Map<String, Object>> extractProductsFromFields(com.google.firebase.firestore.DocumentSnapshot orderItemDoc) {
@@ -415,7 +569,6 @@ public class RevenueReportActivity extends AppCompatActivity {
         }
 
         Log.d(TAG, "=== EXTRACTING PRODUCTS FROM FIELDS ===");
-        Log.d(TAG, "Available fields: " + data.keySet().toString());
 
         // Tìm tất cả fields có pattern "product" + số
         for (String fieldName : data.keySet()) {
@@ -455,62 +608,6 @@ public class RevenueReportActivity extends AppCompatActivity {
         return products;
     }
 
-    private void classifyOrderRevenue(String orderId, List<Map<String, Object>> products) {
-        Log.d(TAG, String.format("=== CLASSIFYING REVENUE FOR ORDER %s ===", orderId));
-        Log.d(TAG, String.format("Number of products: %d", products.size()));
-
-        final AtomicReference<Double> orderFlashsaleRevenue = new AtomicReference<>(0.0);
-        final AtomicReference<Double> orderNormalRevenue = new AtomicReference<>(0.0);
-        final AtomicInteger processedProducts = new AtomicInteger(0);
-        final int totalProducts = products.size();
-
-        for (Map<String, Object> product : products) {
-            String productId = (String) product.get("product_id");
-            Object totalCostObj = product.get("total_cost_of_goods");
-
-            Log.d(TAG, String.format("🔍 Processing product: %s", productId));
-            Log.d(TAG, String.format("  Raw total_cost: %s (type: %s)", totalCostObj, totalCostObj != null ? totalCostObj.getClass().getSimpleName() : "null"));
-
-            if (productId == null || totalCostObj == null) {
-                Log.w(TAG, String.format("❌ Missing data for product: ID=%s, TotalCost=%s", productId, totalCostObj));
-                if (processedProducts.incrementAndGet() >= totalProducts) {
-                    finalizeOrderRevenueClassification(orderId, orderFlashsaleRevenue.get(), orderNormalRevenue.get());
-                }
-                continue;
-            }
-
-            double totalCostOfGoods = (totalCostObj instanceof Long) ?
-                    ((Long) totalCostObj).doubleValue() : (Double) totalCostObj;
-
-            Log.d(TAG, String.format("✅ Product %s validated: TotalCost=%.2f", productId, totalCostOfGoods));
-
-            // Check if product is in active flashsale
-            boolean isInFlashsale = isProductInActiveFlashsale(productId);
-
-            Log.d(TAG, String.format("🔥 REVENUE CLASSIFICATION for %s:", productId));
-            Log.d(TAG, String.format("  Total Cost of Goods: %.2f", totalCostOfGoods));
-            Log.d(TAG, String.format("  Is in Flashsale: %s", isInFlashsale));
-
-            if (isInFlashsale) {
-                double oldFlashsaleRevenue = orderFlashsaleRevenue.get();
-                orderFlashsaleRevenue.updateAndGet(v -> v + totalCostOfGoods);
-                Log.d(TAG, String.format("  ✅ CLASSIFIED AS FLASHSALE REVENUE"));
-                Log.d(TAG, String.format("  📈 Flashsale Revenue: %.2f -> %.2f (added %.2f)",
-                        oldFlashsaleRevenue, orderFlashsaleRevenue.get(), totalCostOfGoods));
-            } else {
-                double oldNormalRevenue = orderNormalRevenue.get();
-                orderNormalRevenue.updateAndGet(v -> v + totalCostOfGoods);
-                Log.d(TAG, String.format("  ✅ CLASSIFIED AS NORMAL REVENUE"));
-                Log.d(TAG, String.format("  📈 Normal Revenue: %.2f -> %.2f (added %.2f)",
-                        oldNormalRevenue, orderNormalRevenue.get(), totalCostOfGoods));
-            }
-
-            if (processedProducts.incrementAndGet() >= totalProducts) {
-                finalizeOrderRevenueClassification(orderId, orderFlashsaleRevenue.get(), orderNormalRevenue.get());
-            }
-        }
-    }
-
     private boolean isProductInActiveFlashsale(String productId) {
         FlashsaleInfo flashsaleInfo = flashsaleCache.get(productId);
         if (flashsaleInfo == null) {
@@ -528,40 +625,7 @@ public class RevenueReportActivity extends AppCompatActivity {
         Log.d(TAG, String.format("  Is Active: %s", isActive));
         Log.d(TAG, String.format("  Discount Rate: %.2f%%", flashsaleInfo.discountRate));
 
-        // TEMPORARY FIX: Force active for testing (uncomment if needed)
-        // if (!isActive && flashsaleInfo != null) {
-        //     Log.w(TAG, "🔧 FORCING FLASHSALE ACTIVE FOR TESTING");
-        //     return true;
-        // }
-
         return isActive;
-    }
-
-    private void finalizeOrderRevenueClassification(String orderId, double orderFlashsaleRevenue, double orderNormalRevenue) {
-        Log.d(TAG, "=== FINALIZING ORDER REVENUE CLASSIFICATION ===");
-        Log.d(TAG, String.format("Order ID: %s", orderId));
-
-        // Update global revenue metrics
-        Log.d(TAG, "STEP 1 - Update Global Flashsale Revenue:");
-        double oldGlobalFlashsaleRevenue = flashsaleRevenue.get();
-        flashsaleRevenue.updateAndGet(v -> v + orderFlashsaleRevenue);
-        Log.d(TAG, String.format("  Global Flashsale Revenue: %.2f -> %.2f (added %.2f)",
-                oldGlobalFlashsaleRevenue, flashsaleRevenue.get(), orderFlashsaleRevenue));
-
-        Log.d(TAG, "STEP 2 - Update Global Normal Revenue:");
-        double oldGlobalNormalRevenue = normalRevenue.get();
-        normalRevenue.updateAndGet(v -> v + orderNormalRevenue);
-        Log.d(TAG, String.format("  Global Normal Revenue: %.2f -> %.2f (added %.2f)",
-                oldGlobalNormalRevenue, normalRevenue.get(), orderNormalRevenue));
-
-        Log.d(TAG, "=== ORDER REVENUE CLASSIFICATION SUMMARY ===");
-        Log.d(TAG, String.format("Order %s Results:", orderId));
-        Log.d(TAG, String.format("  Flashsale Revenue: %.2f", orderFlashsaleRevenue));
-        Log.d(TAG, String.format("  Normal Revenue: %.2f", orderNormalRevenue));
-        Log.d(TAG, String.format("  Total Order Revenue: %.2f", orderFlashsaleRevenue + orderNormalRevenue));
-        Log.d(TAG, "==========================================");
-
-        checkAnalysisComplete();
     }
 
     private void checkAnalysisComplete() {
@@ -583,8 +647,8 @@ public class RevenueReportActivity extends AppCompatActivity {
         double calculatedTotalRevenue = flashsaleRevenueValue + normalRevenueValue;
         double avgDailyRevenue = dailyRevenueData.size() > 0 ? totalRevenueValue / dailyRevenueData.size() : 0;
 
-        Log.d(TAG, "🔥 REVENUE CLASSIFICATION RESULTS 🔥");
-        Log.d(TAG, String.format("Total Revenue (from order_value): %.2f", totalRevenueValue));
+        Log.d(TAG, "🔥 CORRECTED REVENUE CLASSIFICATION RESULTS 🔥");
+        Log.d(TAG, String.format("Total Revenue (from total_cost_of_goods): %.2f", totalRevenueValue));
         Log.d(TAG, String.format("Total Revenue (calculated): %.2f", calculatedTotalRevenue));
         Log.d(TAG, String.format("Flashsale Revenue: %.2f (%.1f%%)",
                 flashsaleRevenueValue, totalRevenueValue > 0 ? (flashsaleRevenueValue / totalRevenueValue) * 100 : 0));
@@ -632,12 +696,15 @@ public class RevenueReportActivity extends AppCompatActivity {
                         }
                     }
 
-                    double estimatedImpact = totalVoucherValue * activeVouchers * 2; // Estimate usage
+                    // Tạo final variables cho lambda
+                    final double finalTotalVoucherValue = totalVoucherValue;
+                    final int finalActiveVouchers = activeVouchers;
+                    final double estimatedImpact = finalTotalVoucherValue * finalActiveVouchers * 2; // Estimate usage
 
                     tvVoucherImpact.setText(String.format("Voucher tiết kiệm %s cho khách hàng (%d voucher)",
-                            currencyFormatter.format(estimatedImpact), activeVouchers));
+                            currencyFormatter.format(estimatedImpact), finalActiveVouchers));
 
-                    Log.d(TAG, String.format("Voucher impact: %.2f from %d vouchers", estimatedImpact, activeVouchers));
+                    Log.d(TAG, String.format("Voucher impact: %.2f from %d vouchers", estimatedImpact, finalActiveVouchers));
 
                     onComplete.run();
                 })

@@ -264,9 +264,8 @@
                                         android:layout_width="36dp"
                                         android:layout_height="36dp"
                                         android:src="@mipmap/ic_chat"
-                                        android:tint="#FFFFFF"
                                         android:layout_marginBottom="12dp"
-                                        />
+                                        app:tint="#FFFFFF" />
 
                                     <TextView
                                         android:layout_width="wrap_content"
@@ -311,9 +310,8 @@
                                         android:layout_width="36dp"
                                         android:layout_height="36dp"
                                         android:src="@drawable/ic_analytics"
-                                        android:tint="#FFFFFF"
                                         android:layout_marginBottom="12dp"
-                                       />
+                                        app:tint="#FFFFFF" />
 
                                     <TextView
                                         android:layout_width="wrap_content"
@@ -358,8 +356,8 @@
                                         android:layout_width="36dp"
                                         android:layout_height="36dp"
                                         android:src="@drawable/ic_shopping_cart"
-                                        android:tint="#FFFFFF"
-                                        android:layout_marginBottom="12dp"/>
+                                        android:layout_marginBottom="12dp"
+                                        app:tint="#FFFFFF" />
 
                                     <TextView
                                         android:layout_width="wrap_content"
@@ -404,8 +402,8 @@
                                         android:layout_width="36dp"
                                         android:layout_height="36dp"
                                         android:src="@drawable/ic_people"
-                                        android:tint="#FFFFFF"
-                                        android:layout_marginBottom="12dp"/>
+                                        android:layout_marginBottom="12dp"
+                                        app:tint="#FFFFFF" />
 
                                     <TextView
                                         android:layout_width="wrap_content"
@@ -450,8 +448,8 @@
                                         android:layout_width="36dp"
                                         android:layout_height="36dp"
                                         android:src="@mipmap/ic_all_product_black"
-                                        android:tint="#FFFFFF"
-                                        android:layout_marginBottom="12dp"/>
+                                        android:layout_marginBottom="12dp"
+                                        app:tint="#FFFFFF" />
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
@@ -537,8 +535,8 @@
                             android:layout_width="64dp"
                             android:layout_height="64dp"
                             android:src="@mipmap/ic_chat"
-                            android:tint="#cbd5e1"
-                            android:layout_marginBottom="16dp"/>
+                            android:layout_marginBottom="16dp"
+                            app:tint="#cbd5e1" />
 
                         <TextView
                             android:layout_width="wrap_content"

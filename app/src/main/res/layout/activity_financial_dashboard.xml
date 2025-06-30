@@ -16,8 +16,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:paddingBottom="16dp"
-            >
+            android:paddingBottom="16dp">
 
             <!-- Back Icon -->
             <ImageView
@@ -29,7 +28,7 @@
                 android:onClick="onBackPressed"
                 app:tint="#FFFFFF" />
 
-            <!-- Title (sẽ tự căn giữa phần còn lại) -->
+            <!-- Title -->
             <TextView
                 android:id="@+id/tvTitle"
                 android:layout_width="0dp"
@@ -70,7 +69,7 @@
                         android:id="@+id/tvTotalRevenue"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="0 VNĐ"
+                        android:text="@string/default_currency_value"
                         android:textColor="#9c162c"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -106,7 +105,7 @@
                         android:id="@+id/tvTotalProfit"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="0 VNĐ"
+                        android:text="@string/default_currency_value"
                         android:textColor="#9c162c"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -150,7 +149,7 @@
                         android:id="@+id/tvTotalOrders"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="0"
+                        android:text="@string/default_number"
                         android:textColor="#9c162c"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -186,7 +185,7 @@
                         android:id="@+id/tvProfitMargin"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="0%"
+                        android:text="@string/default_percentage"
                         android:textColor="#9c162c"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -230,7 +229,7 @@
                         android:id="@+id/tvRevenueGrowth"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="+0%"
+                        android:text="@string/default_growth"
                         android:textColor="#4CAF50"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -255,7 +254,7 @@
                         android:id="@+id/tvProfitGrowth"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="+0%"
+                        android:text="@string/default_growth"
                         android:textColor="#4CAF50"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -280,7 +279,7 @@
                         android:id="@+id/tvOrderGrowth"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="+0%"
+                        android:text="@string/default_growth"
                         android:textColor="#4CAF50"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -305,7 +304,7 @@
                         android:id="@+id/tvMarginGrowth"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="+0%"
+                        android:text="@string/default_growth"
                         android:textColor="#4CAF50"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -452,7 +451,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="📊"
+                    android:text="@string/chart_icon"
                     android:textSize="24sp"
                     android:layout_marginEnd="16dp" />
 
@@ -482,7 +481,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="→"
+                    android:text="@string/arrow_icon"
                     android:textColor="#9c162c"
                     android:textSize="20sp" />
 
@@ -512,7 +511,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="💰"
+                    android:text="@string/money_icon"
                     android:textSize="24sp"
                     android:layout_marginEnd="16dp" />
 
@@ -542,7 +541,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="→"
+                    android:text="@string/arrow_icon"
                     android:textColor="#9c162c"
                     android:textSize="20sp" />
 
@@ -572,7 +571,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="📈"
+                    android:text="@string/trend_icon"
                     android:textSize="24sp"
                     android:layout_marginEnd="16dp" />
 
@@ -602,67 +601,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="→"
-                    android:textColor="#9c162c"
-                    android:textSize="20sp" />
-
-            </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardFinancialSummary"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="4dp"
-            app:cardBackgroundColor="#FFFFFF"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?android:attr/selectableItemBackground">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:padding="16dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="📋"
-                    android:textSize="24sp"
-                    android:layout_marginEnd="16dp" />
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/finance_overview"
-                        android:textColor="#9c162c"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/summary"
-                        android:textColor="#666666"
-                        android:textSize="12sp" />
-
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="→"
+                    android:text="@string/arrow_icon"
                     android:textColor="#9c162c"
                     android:textSize="20sp" />
 

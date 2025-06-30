@@ -7,18 +7,23 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.group7.pawdictedadmin.R;
 
-import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -31,85 +36,103 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class TrendAnalysisActivity extends AppCompatActivity {
+    private static final String TAG = "TrendAnalysisActivity";
 
-    private static final String TAG = "TrendAnalysis";
+    private FirebaseFirestore db;
 
-    // UI Components
-    private TextView tvRevenueGrowth, tvProfitGrowth, tvOrderGrowth, tvMarginGrowth;
-    private TextView tvCurrentMonthRevenue, tvLastMonthRevenue, tvCurrentMonthProfit, tvLastMonthProfit;
-    private TextView tvCurrentMonthOrders, tvLastMonthOrders, tvTrendSummary;
-    private LineChart trendChart;
-    private ProgressBar progressBar;
+    // Header
     private ImageView ivBack;
 
-    // Data & Firebase
-    private FirebaseFirestore db;
-    private NumberFormat currencyFormatter;
-    private SimpleDateFormat dateFormat;
+    // Progress Bar
+    private ProgressBar progressBar;
 
-    // Trend Data
-    private Map<String, Double> monthlyRevenueData = new HashMap<>();
-    private Map<String, Double> monthlyProfitData = new HashMap<>();
-    private Map<String, Integer> monthlyOrderData = new HashMap<>();
+    // Growth Indicators
+    private TextView tvRevenueGrowth, tvProfitGrowth, tvOrderGrowth, tvMarginGrowth;
 
-    // Current vs Last Month Data
-    private AtomicReference<Double> currentMonthRevenue = new AtomicReference<>(0.0);
-    private AtomicReference<Double> lastMonthRevenue = new AtomicReference<>(0.0);
-    private AtomicReference<Double> currentMonthProfit = new AtomicReference<>(0.0);
-    private AtomicReference<Double> lastMonthProfit = new AtomicReference<>(0.0);
-    private AtomicReference<Integer> currentMonthOrders = new AtomicReference<>(0);
-    private AtomicReference<Integer> lastMonthOrders = new AtomicReference<>(0);
+    // Current vs Last Month
+    private TextView tvCurrentMonthRevenue, tvCurrentMonthProfit, tvCurrentMonthOrders;
+    private TextView tvLastMonthRevenue, tvLastMonthProfit, tvLastMonthOrders;
 
-    // Processing State
-    private AtomicInteger completedAnalysis = new AtomicInteger(0);
+    // Analysis Sections
+    private TextView tvTrendSummary;
+    private TextView tvQuarterlyGrowth;
+    private TextView tvYearlyProjection;
+    private TextView tvCostAnalysis;
+    private TextView tvRecommendations;
+
+    // Chart
+    private LineChart trendChart;
+
+    // Data storage
+    private double currentMonthRevenue = 0;
+    private double currentMonthProfit = 0;
+    private int currentMonthOrders = 0;
+    private double lastMonthRevenue = 0;
+    private double lastMonthProfit = 0;
+    private int lastMonthOrders = 0;
+
+    // Category data storage
+    private Map<String, Double> currentMonthCategoryRevenue = new HashMap<>();
+    private Map<String, Double> currentMonthCategoryProfit = new HashMap<>();
+    private Map<String, Double> lastMonthCategoryRevenue = new HashMap<>();
+    private Map<String, Double> lastMonthCategoryProfit = new HashMap<>();
+
+    // Flashsale cache
     private Map<String, FlashsaleInfo> flashsaleCache = new HashMap<>();
-
-    static class FlashsaleInfo {
-        String productId;
-        double discountRate;
-        long startTime;
-        long endTime;
-        double originalPrice;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trend_analysis);
 
-        initializeComponents();
-        loadTrendData();
+        initViews();
+        db = FirebaseFirestore.getInstance();
+
+        setupClickListeners();
+
+        // Gọi loadFlashsaleData với callback
+        loadFlashsaleData(() -> {
+            // Sau khi load xong flashsale data thì load trend data
+            loadTrendData();
+        });
     }
 
-    private void initializeComponents() {
-        // Initialize views
+    private void initViews() {
+        // Header
+        ivBack = findViewById(R.id.ivBack);
+
+        // Progress Bar
+        progressBar = findViewById(R.id.progressBar);
+
+        // Growth Indicators
         tvRevenueGrowth = findViewById(R.id.tvRevenueGrowth);
         tvProfitGrowth = findViewById(R.id.tvProfitGrowth);
         tvOrderGrowth = findViewById(R.id.tvOrderGrowth);
         tvMarginGrowth = findViewById(R.id.tvMarginGrowth);
+
+        // Current vs Last Month
         tvCurrentMonthRevenue = findViewById(R.id.tvCurrentMonthRevenue);
-        tvLastMonthRevenue = findViewById(R.id.tvLastMonthRevenue);
         tvCurrentMonthProfit = findViewById(R.id.tvCurrentMonthProfit);
-        tvLastMonthProfit = findViewById(R.id.tvLastMonthProfit);
         tvCurrentMonthOrders = findViewById(R.id.tvCurrentMonthOrders);
+        tvLastMonthRevenue = findViewById(R.id.tvLastMonthRevenue);
+        tvLastMonthProfit = findViewById(R.id.tvLastMonthProfit);
         tvLastMonthOrders = findViewById(R.id.tvLastMonthOrders);
+
+        // Analysis Sections
         tvTrendSummary = findViewById(R.id.tvTrendSummary);
+        tvQuarterlyGrowth = findViewById(R.id.tvQuarterlyGrowth);
+        tvYearlyProjection = findViewById(R.id.tvYearlyProjection);
+        tvCostAnalysis = findViewById(R.id.tvCostAnalysis);
+        tvRecommendations = findViewById(R.id.tvRecommendations);
+
+        // Chart
         trendChart = findViewById(R.id.trendChart);
-        progressBar = findViewById(R.id.progressBar);
-        ivBack = findViewById(R.id.ivBack);
 
-        // Initialize Firebase and formatters
-        db = FirebaseFirestore.getInstance();
-        currencyFormatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
-        dateFormat = new SimpleDateFormat("MM/yyyy", Locale.getDefault());
-
-        // Setup chart
         setupChart();
+    }
 
-        // Setup click listeners
+    private void setupClickListeners() {
         ivBack.setOnClickListener(v -> finish());
-
-        Log.d(TAG, "Components initialized");
     }
 
     private void setupChart() {
@@ -122,70 +145,46 @@ public class TrendAnalysisActivity extends AppCompatActivity {
         XAxis xAxis = trendChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setDrawGridLines(false);
+        xAxis.setGranularity(1f);
+
+        YAxis leftAxis = trendChart.getAxisLeft();
+        leftAxis.setDrawGridLines(true);
+        leftAxis.setAxisMinimum(0f);
 
         trendChart.getAxisRight().setEnabled(false);
-        trendChart.getAxisLeft().setDrawGridLines(false);
         trendChart.getLegend().setEnabled(true);
-
-        Log.d(TAG, "Chart setup completed");
-    }
-
-    private void loadTrendData() {
-        showProgress(true);
-        Log.d(TAG, "Loading trend analysis data");
-
-        resetData();
-
-        // Step 1: Load flashsale data
-        loadFlashsaleData(() -> {
-            // Step 2: Analyze trends
-            analyzeTrends();
-        });
-    }
-
-    private void resetData() {
-        currentMonthRevenue.set(0.0);
-        lastMonthRevenue.set(0.0);
-        currentMonthProfit.set(0.0);
-        lastMonthProfit.set(0.0);
-        currentMonthOrders.set(0);
-        lastMonthOrders.set(0);
-        completedAnalysis.set(0);
-
-        flashsaleCache.clear();
-        monthlyRevenueData.clear();
-        monthlyProfitData.clear();
-        monthlyOrderData.clear();
-
-        Log.d(TAG, "Data reset");
     }
 
     private void loadFlashsaleData(Runnable onComplete) {
-        Log.d(TAG, "Loading flashsale data for trend analysis");
+        Log.d(TAG, "loadFlashsaleData: Loading flashsale data for classification");
+        showLoading(true);
 
         db.collection("flashsales")
                 .get()
                 .addOnSuccessListener(flashsaleSnapshot -> {
-                    final AtomicInteger totalProducts = new AtomicInteger(0);
-                    final AtomicInteger processedProducts = new AtomicInteger(0);
+                    Log.d(TAG, "loadFlashsaleData: Loaded " + flashsaleSnapshot.size() + " flashsales");
 
-                    // Count total products
+                    final AtomicInteger totalFlashsaleProducts = new AtomicInteger(0);
+                    final AtomicInteger processedFlashsaleProducts = new AtomicInteger(0);
+
+                    // Đếm tổng số products trong flashsales
                     for (QueryDocumentSnapshot flashsaleDoc : flashsaleSnapshot) {
                         List<Map<String, Object>> products = (List<Map<String, Object>>) flashsaleDoc.get("products");
                         if (products != null) {
-                            totalProducts.addAndGet(products.size());
+                            totalFlashsaleProducts.addAndGet(products.size());
                         }
                     }
 
-                    if (totalProducts.get() == 0) {
+                    if (totalFlashsaleProducts.get() == 0) {
+                        Log.w(TAG, "loadFlashsaleData: No flashsale products found");
                         onComplete.run();
                         return;
                     }
 
-                    // Process flashsales
                     for (QueryDocumentSnapshot flashsaleDoc : flashsaleSnapshot) {
                         Long startTime = flashsaleDoc.getLong("startTime");
                         Long endTime = flashsaleDoc.getLong("endTime");
+                        String flashsaleName = flashsaleDoc.getString("flashSale_name");
                         List<Map<String, Object>> products = (List<Map<String, Object>>) flashsaleDoc.get("products");
 
                         if (products != null && startTime != null && endTime != null) {
@@ -197,11 +196,13 @@ public class TrendAnalysisActivity extends AppCompatActivity {
                                     double discountRate = (discountRateObj instanceof Long) ?
                                             ((Long) discountRateObj).doubleValue() : (Double) discountRateObj;
 
+                                    // Lấy giá gốc từ products collection
                                     db.collection("products").document(productId)
                                             .get()
                                             .addOnSuccessListener(productDoc -> {
                                                 if (productDoc.exists()) {
                                                     Double originalPrice = productDoc.getDouble("price");
+                                                    String productName = productDoc.getString("product_name");
 
                                                     if (originalPrice != null) {
                                                         FlashsaleInfo info = new FlashsaleInfo();
@@ -210,23 +211,28 @@ public class TrendAnalysisActivity extends AppCompatActivity {
                                                         info.startTime = startTime;
                                                         info.endTime = endTime;
                                                         info.originalPrice = originalPrice;
+                                                        info.flashsaleName = flashsaleName;
 
                                                         flashsaleCache.put(productId, info);
+
+                                                        Log.d(TAG, String.format("loadFlashsaleData: Cached flashsale '%s' for product '%s' (%s) - %.2f%% discount",
+                                                                flashsaleName, productName, productId, discountRate));
                                                     }
                                                 }
 
-                                                if (processedProducts.incrementAndGet() >= totalProducts.get()) {
-                                                    Log.d(TAG, "Flashsale data loaded: " + flashsaleCache.size() + " products");
+                                                if (processedFlashsaleProducts.incrementAndGet() >= totalFlashsaleProducts.get()) {
+                                                    Log.d(TAG, "loadFlashsaleData: All flashsale products cached. Total: " + flashsaleCache.size());
                                                     onComplete.run();
                                                 }
                                             })
                                             .addOnFailureListener(e -> {
-                                                if (processedProducts.incrementAndGet() >= totalProducts.get()) {
+                                                Log.e(TAG, "loadFlashsaleData: Error loading product: " + productId, e);
+                                                if (processedFlashsaleProducts.incrementAndGet() >= totalFlashsaleProducts.get()) {
                                                     onComplete.run();
                                                 }
                                             });
                                 } else {
-                                    if (processedProducts.incrementAndGet() >= totalProducts.get()) {
+                                    if (processedFlashsaleProducts.incrementAndGet() >= totalFlashsaleProducts.get()) {
                                         onComplete.run();
                                     }
                                 }
@@ -235,31 +241,49 @@ public class TrendAnalysisActivity extends AppCompatActivity {
                     }
                 })
                 .addOnFailureListener(e -> {
-                    Log.e(TAG, "Error loading flashsale data", e);
+                    Log.e(TAG, "loadFlashsaleData: Error loading flashsale data", e);
+                    showLoading(false);
+                    Toast.makeText(this, "Lỗi tải dữ liệu flashsale: " + e.getMessage(),
+                            Toast.LENGTH_SHORT).show();
                     onComplete.run();
                 });
     }
 
-    private void analyzeTrends() {
-        Log.d(TAG, "Analyzing trends");
+    private void loadTrendData() {
+        Log.d(TAG, "Starting trend analysis...");
 
-        // Get current and last month dates
-        Calendar now = Calendar.getInstance();
-        Calendar lastMonth = Calendar.getInstance();
-        lastMonth.add(Calendar.MONTH, -1);
+        // Debug flashsale cache trước khi bắt đầu
+        debugFlashsaleCache();
 
-        Date currentMonthStart = getStartOfMonth(now.getTime());
-        Date currentMonthEnd = getEndOfMonth(now.getTime());
-        Date lastMonthStart = getStartOfMonth(lastMonth.getTime());
-        Date lastMonthEnd = getEndOfMonth(lastMonth.getTime());
+        Calendar cal = Calendar.getInstance();
 
-        // Analyze current month
+        // Current month dates
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        Date currentMonthStart = cal.getTime();
+
+        cal.add(Calendar.MONTH, 1);
+        Date currentMonthEnd = cal.getTime();
+
+        // Last month dates
+        cal.add(Calendar.MONTH, -2);
+        Date lastMonthStart = cal.getTime();
+
+        cal.add(Calendar.MONTH, 1);
+        Date lastMonthEnd = cal.getTime();
+
+        Log.d(TAG, String.format("Date ranges - Current: %s to %s, Last: %s to %s",
+                currentMonthStart, currentMonthEnd, lastMonthStart, lastMonthEnd));
+
+        // Analyze both months
         analyzeMonthData(currentMonthStart, currentMonthEnd, true, () -> {
-            // Analyze last month
             analyzeMonthData(lastMonthStart, lastMonthEnd, false, () -> {
-                // Analyze historical data for chart
-                analyzeHistoricalData(() -> {
-                    finalizeAnalysis();
+                runOnUiThread(() -> {
+                    updateUI();
+                    showLoading(false);
                 });
             });
         });
@@ -267,8 +291,7 @@ public class TrendAnalysisActivity extends AppCompatActivity {
 
     private void analyzeMonthData(Date startDate, Date endDate, boolean isCurrentMonth, Runnable onComplete) {
         String monthLabel = isCurrentMonth ? "current" : "last";
-        Log.d(TAG, String.format("Analyzing %s month data from %s to %s",
-                monthLabel, dateFormat.format(startDate), dateFormat.format(endDate)));
+        Log.d(TAG, String.format("Analyzing %s month data with Pawdicted profit logic", monthLabel));
 
         db.collection("orders")
                 .whereEqualTo("order_status", "Completed")
@@ -288,7 +311,11 @@ public class TrendAnalysisActivity extends AppCompatActivity {
                     final AtomicInteger processedOrders = new AtomicInteger(0);
                     final int totalOrders = orderSnapshot.size();
 
-                    // Calculate revenue from order_value
+                    // Khởi tạo category tracking
+                    final Map<String, Double> categoryRevenue = new HashMap<>();
+                    final Map<String, Double> categoryProfit = new HashMap<>();
+
+                    // Tính doanh thu từ order_value (theo logic Pawdicted)
                     for (QueryDocumentSnapshot orderDoc : orderSnapshot) {
                         Double orderValue = orderDoc.getDouble("order_value");
                         if (orderValue != null) {
@@ -297,41 +324,32 @@ public class TrendAnalysisActivity extends AppCompatActivity {
                         }
                     }
 
-                    // Calculate profit for each order
+                    Log.d(TAG, String.format("%s month - Total orders: %d, Revenue from order_value: %.2f",
+                            monthLabel, monthOrders.get(), monthRevenue.get()));
+
+                    // Tính lợi nhuận chi tiết cho từng order
                     for (QueryDocumentSnapshot orderDoc : orderSnapshot) {
                         String orderItemId = orderDoc.getString("order_item_id");
 
                         if (orderItemId != null) {
-                            calculateOrderProfit(orderItemId, monthProfit, () -> {
-                                if (processedOrders.incrementAndGet() >= totalOrders) {
-                                    // Update month data
-                                    if (isCurrentMonth) {
-                                        currentMonthRevenue.set(monthRevenue.get());
-                                        currentMonthProfit.set(monthProfit.get());
-                                        currentMonthOrders.set(monthOrders.get());
-                                    } else {
-                                        lastMonthRevenue.set(monthRevenue.get());
-                                        lastMonthProfit.set(monthProfit.get());
-                                        lastMonthOrders.set(monthOrders.get());
-                                    }
+                            calculateOrderProfitWithCategoryAndRevenue(orderItemId, monthProfit,
+                                    categoryProfit, categoryRevenue, () -> {
+                                        if (processedOrders.incrementAndGet() >= totalOrders) {
+                                            // Sử dụng method updateMonthDataWithCategories
+                                            updateMonthDataWithCategories(isCurrentMonth, monthRevenue.get(),
+                                                    monthProfit.get(), monthOrders.get(), categoryRevenue, categoryProfit);
 
-                                    Log.d(TAG, String.format("%s month results: Revenue=%.2f, Profit=%.2f, Orders=%d",
-                                            monthLabel, monthRevenue.get(), monthProfit.get(), monthOrders.get()));
+                                            Log.d(TAG, String.format("%s month Pawdicted results: Revenue=%.2f, Profit=%.2f, Orders=%d, Margin=%.2f%%",
+                                                    monthLabel, monthRevenue.get(), monthProfit.get(), monthOrders.get(),
+                                                    monthRevenue.get() > 0 ? (monthProfit.get() / monthRevenue.get() * 100) : 0));
 
-                                    onComplete.run();
-                                }
-                            });
+                                            onComplete.run();
+                                        }
+                                    });
                         } else {
                             if (processedOrders.incrementAndGet() >= totalOrders) {
-                                if (isCurrentMonth) {
-                                    currentMonthRevenue.set(monthRevenue.get());
-                                    currentMonthProfit.set(monthProfit.get());
-                                    currentMonthOrders.set(monthOrders.get());
-                                } else {
-                                    lastMonthRevenue.set(monthRevenue.get());
-                                    lastMonthProfit.set(monthProfit.get());
-                                    lastMonthOrders.set(monthOrders.get());
-                                }
+                                updateMonthDataWithCategories(isCurrentMonth, monthRevenue.get(),
+                                        monthProfit.get(), monthOrders.get(), categoryRevenue, categoryProfit);
                                 onComplete.run();
                             }
                         }
@@ -343,12 +361,17 @@ public class TrendAnalysisActivity extends AppCompatActivity {
                 });
     }
 
-    private void calculateOrderProfit(String orderItemId, AtomicReference<Double> monthProfit, Runnable onComplete) {
+    private void calculateOrderProfitWithCategoryAndRevenue(String orderItemId,
+                                                            AtomicReference<Double> monthProfit,
+                                                            Map<String, Double> categoryProfit,
+                                                            Map<String, Double> categoryRevenue,
+                                                            Runnable onComplete) {
+
         db.collection("order_items").document(orderItemId)
                 .get()
                 .addOnSuccessListener(orderItemDoc -> {
                     if (orderItemDoc.exists()) {
-                        List<Map<String, Object>> products = (List<Map<String, Object>>) orderItemDoc.get("products");
+                        List<Map<String, Object>> products = extractProductsFromFields(orderItemDoc);
 
                         if (products != null && !products.isEmpty()) {
                             final AtomicReference<Double> orderProfit = new AtomicReference<>(0.0);
@@ -358,52 +381,25 @@ public class TrendAnalysisActivity extends AppCompatActivity {
                             for (Map<String, Object> product : products) {
                                 String productId = (String) product.get("product_id");
                                 Object quantityObj = product.get("quantity");
+                                Object totalCostObj = product.get("total_cost_of_goods");
 
-                                if (productId != null && quantityObj != null) {
-                                    int quantity = (quantityObj instanceof Long) ?
-                                            ((Long) quantityObj).intValue() : (Integer) quantityObj;
+                                if (productId != null && quantityObj != null && totalCostObj != null) {
+                                    int quantity = convertToInt(quantityObj);
+                                    double totalCostOfGoods = convertToDouble(totalCostObj);
 
-                                    final String finalProductId = productId;
-                                    final int finalQuantity = quantity;
+                                    // Cập nhật category revenue
+                                    updateCategoryRevenue(categoryRevenue, productId, totalCostOfGoods);
 
-                                    db.collection("products").document(finalProductId)
-                                            .get()
-                                            .addOnSuccessListener(productDoc -> {
-                                                if (productDoc.exists()) {
-                                                    Double price = productDoc.getDouble("price");
-                                                    Double discount = productDoc.getDouble("discount");
-
-                                                    if (price != null && price > 0) {
-                                                        if (discount == null) discount = 0.0;
-
-                                                        // Calculate profit
-                                                        boolean isInFlashsale = isProductInActiveFlashsale(finalProductId);
-                                                        double flashsaleDiscountRate = isInFlashsale ?
-                                                                flashsaleCache.get(finalProductId).discountRate : 0;
-
-                                                        double baseProfit = price * 0.3 * finalQuantity;
-                                                        double productDiscount = discount * finalQuantity;
-                                                        double flashsaleDiscount = isInFlashsale ?
-                                                                (price * flashsaleDiscountRate / 100 * finalQuantity) : 0;
-                                                        double totalDiscount = productDiscount + flashsaleDiscount;
-                                                        double actualProfit = baseProfit - totalDiscount;
-
-                                                        orderProfit.updateAndGet(v -> v + actualProfit);
-                                                    }
-                                                }
-
+                                    calculateProductProfitWithCategory(productId, quantity,
+                                            orderProfit, categoryProfit, () -> {
                                                 if (processedProducts.incrementAndGet() >= totalProducts) {
                                                     monthProfit.updateAndGet(v -> v + orderProfit.get());
-                                                    onComplete.run();
-                                                }
-                                            })
-                                            .addOnFailureListener(e -> {
-                                                if (processedProducts.incrementAndGet() >= totalProducts) {
                                                     onComplete.run();
                                                 }
                                             });
                                 } else {
                                     if (processedProducts.incrementAndGet() >= totalProducts) {
+                                        monthProfit.updateAndGet(v -> v + orderProfit.get());
                                         onComplete.run();
                                     }
                                 }
@@ -421,260 +417,524 @@ public class TrendAnalysisActivity extends AppCompatActivity {
                 });
     }
 
-    private boolean isProductInActiveFlashsale(String productId) {
-        FlashsaleInfo flashsaleInfo = flashsaleCache.get(productId);
-        if (flashsaleInfo == null) return false;
+    private void calculateProductProfitWithCategory(String productId, int quantity,
+                                                    AtomicReference<Double> orderProfit,
+                                                    Map<String, Double> categoryProfit,
+                                                    Runnable onComplete) {
 
-        long currentTime = System.currentTimeMillis();
-        return currentTime >= flashsaleInfo.startTime && currentTime <= flashsaleInfo.endTime;
+        db.collection("products").document(productId)
+                .get()
+                .addOnSuccessListener(productDoc -> {
+                    if (productDoc.exists()) {
+                        Double price = productDoc.getDouble("price");
+                        Double discount = productDoc.getDouble("discount");
+
+                        if (price != null && price > 0) {
+                            if (discount == null) discount = 0.0;
+
+                            // Tính lợi nhuận theo logic Pawdicted
+                            double profit = calculatePawdictedProfitLogic(productId, price, discount, quantity);
+
+                            // Cập nhật order profit
+                            orderProfit.updateAndGet(v -> v + profit);
+
+                            // Cập nhật category profit
+                            updateCategoryProfit(categoryProfit, productId, profit);
+
+                            Log.d(TAG, String.format("Product %s profit: %.2f added to order and category",
+                                    productId, profit));
+                        }
+                    }
+                    onComplete.run();
+                })
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "Error getting product: " + productId, e);
+                    onComplete.run();
+                });
     }
 
-    private void analyzeHistoricalData(Runnable onComplete) {
-        Log.d(TAG, "Analyzing historical data for trend chart");
+    private double calculatePawdictedProfitLogic(String productId, double price,
+                                                 double productDiscount, int quantity) {
 
-        // Get last 6 months data
-        Calendar cal = Calendar.getInstance();
+        Log.d(TAG, "=== PAWDICTED PROFIT CALCULATION ===");
+        Log.d(TAG, String.format("Input - Product: %s, Price: %.2f, Discount: %.2f, Quantity: %d",
+                productId, price, productDiscount, quantity));
 
-        final AtomicInteger processedMonths = new AtomicInteger(0);
-        final int totalMonths = 6;
+        // STEP 1: Tính lợi nhuận cơ bản (30% của giá)
+        double baseProfit = price * 0.3 * quantity;
+        Log.d(TAG, String.format("STEP 1 - Base Profit: %.2f × 0.3 × %d = %.2f",
+                price, quantity, baseProfit));
 
-        for (int i = 0; i < totalMonths; i++) {
-            Date monthStart = getStartOfMonth(cal.getTime());
-            Date monthEnd = getEndOfMonth(cal.getTime());
-            String monthKey = dateFormat.format(cal.getTime());
+        // STEP 2: Tính discount từ sản phẩm
+        double productDiscountAmount = productDiscount * quantity;
+        Log.d(TAG, String.format("STEP 2 - Product Discount: %.2f × %d = %.2f",
+                productDiscount, quantity, productDiscountAmount));
 
-            final String finalMonthKey = monthKey;
+        // STEP 3: Kiểm tra flashsale với logging chi tiết
+        Log.d(TAG, String.format("STEP 3 - Checking flashsale for product: %s", productId));
+        FlashsaleInfo flashsaleInfo = getActiveFlashsaleForProduct(productId);
+        double flashsaleDiscountAmount = 0.0;
 
-            db.collection("orders")
-                    .whereEqualTo("order_status", "Completed")
-                    .whereGreaterThanOrEqualTo("order_time", monthStart)
-                    .whereLessThan("order_time", monthEnd)
-                    .get()
-                    .addOnSuccessListener(monthSnapshot -> {
-                        double monthRevenue = 0;
-                        int monthOrders = 0;
+        if (flashsaleInfo != null) {
+            // Sử dụng originalPrice từ flashsale hoặc price từ parameter
+            double priceForFlashsale = flashsaleInfo.originalPrice > 0 ? flashsaleInfo.originalPrice : price;
+            flashsaleDiscountAmount = (priceForFlashsale * flashsaleInfo.discountRate / 100) * quantity;
 
-                        for (QueryDocumentSnapshot orderDoc : monthSnapshot) {
-                            Double orderValue = orderDoc.getDouble("order_value");
-                            if (orderValue != null) {
-                                monthRevenue += orderValue;
-                                monthOrders++;
-                            }
-                        }
+            Log.d(TAG, String.format("STEP 3 - FLASHSALE FOUND! '%s'", flashsaleInfo.flashsaleName));
+            Log.d(TAG, String.format("STEP 3 - Product %s: %.2f%% discount on price %.2f",
+                    productId, flashsaleInfo.discountRate, priceForFlashsale));
+            Log.d(TAG, String.format("STEP 3 - Flashsale Discount Amount: %.2f × %.2f / 100 × %d = %.2f",
+                    priceForFlashsale, flashsaleInfo.discountRate, quantity, flashsaleDiscountAmount));
+        } else {
+            Log.d(TAG, String.format("STEP 3 - NO ACTIVE FLASHSALE found for product: %s", productId));
+        }
 
-                        // Estimate profit (30% of revenue for simplicity)
-                        double monthProfit = monthRevenue * 0.3;
+        // STEP 4: Tính tổng discount
+        double totalDiscount = productDiscountAmount + flashsaleDiscountAmount;
+        Log.d(TAG, String.format("STEP 4 - Total Discount: %.2f + %.2f = %.2f",
+                productDiscountAmount, flashsaleDiscountAmount, totalDiscount));
 
-                        synchronized (monthlyRevenueData) {
-                            monthlyRevenueData.put(finalMonthKey, monthRevenue);
-                            monthlyProfitData.put(finalMonthKey, monthProfit);
-                            monthlyOrderData.put(finalMonthKey, monthOrders);
-                        }
+        // STEP 5: Áp dụng logic Pawdicted
+        double finalProfit;
+        double costPortion = price * 0.7 * quantity; // 70% là cost
 
-                        Log.d(TAG, String.format("Historical data for %s: Revenue=%.2f, Profit=%.2f, Orders=%d",
-                                finalMonthKey, monthRevenue, monthProfit, monthOrders));
+        if (totalDiscount <= baseProfit) {
+            // Discount chỉ ảnh hưởng đến 30% lợi nhuận
+            finalProfit = baseProfit - totalDiscount;
+            Log.d(TAG, String.format("STEP 5a - Discount trong giới hạn profit: %.2f - %.2f = %.2f",
+                    baseProfit, totalDiscount, finalProfit));
+        } else {
+            // Discount vượt quá 30% lợi nhuận, ăn vào cost
+            double excessDiscount = totalDiscount - baseProfit;
+            finalProfit = -(excessDiscount); // Lợi nhuận âm
 
-                        if (processedMonths.incrementAndGet() >= totalMonths) {
-                            Log.d(TAG, "Historical data analysis completed");
-                            onComplete.run();
-                        }
-                    })
-                    .addOnFailureListener(e -> {
-                        Log.e(TAG, "Error loading historical data for month: " + finalMonthKey, e);
-                        if (processedMonths.incrementAndGet() >= totalMonths) {
-                            onComplete.run();
-                        }
-                    });
+            Log.d(TAG, String.format("STEP 5b - Discount vượt quá profit:"));
+            Log.d(TAG, String.format("  Excess discount: %.2f - %.2f = %.2f",
+                    totalDiscount, baseProfit, excessDiscount));
+            Log.d(TAG, String.format("  Final profit (negative): %.2f", finalProfit));
+        }
 
-            cal.add(Calendar.MONTH, -1);
+        // STEP 6: Tính tỷ suất lợi nhuận
+        double totalRevenue = price * quantity;
+        double profitMargin = totalRevenue > 0 ? (finalProfit / totalRevenue) * 100 : 0;
+
+        Log.d(TAG, String.format("=== PROFIT CALCULATION SUMMARY ==="));
+        Log.d(TAG, String.format("Product: %s", productId));
+        Log.d(TAG, String.format("Base Profit: %.2f", baseProfit));
+        Log.d(TAG, String.format("Product Discount: %.2f", productDiscountAmount));
+        Log.d(TAG, String.format("Flashsale Discount: %.2f", flashsaleDiscountAmount));
+        Log.d(TAG, String.format("Total Discount: %.2f", totalDiscount));
+        Log.d(TAG, String.format("Final Profit: %.2f", finalProfit));
+        Log.d(TAG, String.format("Profit Margin: %.2f%%", profitMargin));
+        Log.d(TAG, String.format("Flashsale Status: %s", flashsaleInfo != null ? "ACTIVE" : "NONE"));
+        if (flashsaleInfo != null) {
+            Log.d(TAG, String.format("Flashsale Details: %s", flashsaleInfo));
+        }
+        Log.d(TAG, "================================");
+
+        return finalProfit;
+    }
+
+    private FlashsaleInfo getActiveFlashsaleForProduct(String productId) {
+        if (productId == null || productId.trim().isEmpty()) {
+            Log.w(TAG, "Invalid productId for flashsale lookup: " + productId);
+            return null;
+        }
+
+        Log.d(TAG, String.format("Looking up flashsale for product: %s", productId));
+
+        FlashsaleInfo flashsaleInfo = flashsaleCache.get(productId);
+
+        if (flashsaleInfo == null) {
+            Log.d(TAG, String.format("No flashsale found for product: %s", productId));
+            return null;
+        }
+
+        // Kiểm tra thời gian hiện tại
+        long currentTime = System.currentTimeMillis();
+        boolean isActive = currentTime >= flashsaleInfo.startTime && currentTime <= flashsaleInfo.endTime;
+
+        Log.d(TAG, String.format("Flashsale check for %s: Current=%d, Start=%d, End=%d, Active=%s",
+                productId, currentTime, flashsaleInfo.startTime, flashsaleInfo.endTime, isActive));
+
+        if (isActive) {
+            Log.d(TAG, String.format("ACTIVE FLASHSALE found for %s: %s", productId, flashsaleInfo));
+            return flashsaleInfo;
+        } else {
+            Log.d(TAG, String.format("Flashsale for %s is NOT ACTIVE (expired or not started)", productId));
+            return null;
         }
     }
 
-    private void finalizeAnalysis() {
-        Log.d(TAG, "Finalizing trend analysis");
+    private void updateCategoryProfit(Map<String, Double> categoryProfit, String productId, double profit) {
+        if (productId != null && productId.length() >= 2) {
+            String categoryCode = productId.substring(0, 2).toUpperCase();
+            String categoryName = getCategoryNameFromCode(categoryCode);
 
-        // Calculate growth rates
-        double revenueGrowth = calculateGrowthRate(currentMonthRevenue.get(), lastMonthRevenue.get());
-        double profitGrowth = calculateGrowthRate(currentMonthProfit.get(), lastMonthProfit.get());
-        double orderGrowth = calculateGrowthRate(currentMonthOrders.get(), lastMonthOrders.get());
-
-        // Calculate margin growth
-        double currentMargin = currentMonthRevenue.get() > 0 ?
-                (currentMonthProfit.get() / currentMonthRevenue.get()) * 100 : 0;
-        double lastMargin = lastMonthRevenue.get() > 0 ?
-                (lastMonthProfit.get() / lastMonthRevenue.get()) * 100 : 0;
-        double marginGrowth = currentMargin - lastMargin;
-
-        Log.d(TAG, "=== TREND ANALYSIS RESULTS ===");
-        Log.d(TAG, String.format("Current Month: Revenue=%.2f, Profit=%.2f, Orders=%d, Margin=%.2f%%",
-                currentMonthRevenue.get(), currentMonthProfit.get(), currentMonthOrders.get(), currentMargin));
-        Log.d(TAG, String.format("Last Month: Revenue=%.2f, Profit=%.2f, Orders=%d, Margin=%.2f%%",
-                lastMonthRevenue.get(), lastMonthProfit.get(), lastMonthOrders.get(), lastMargin));
-        Log.d(TAG, String.format("Growth Rates: Revenue=%.2f%%, Profit=%.2f%%, Orders=%.2f%%, Margin=%.2f%%",
-                revenueGrowth, profitGrowth, orderGrowth, marginGrowth));
-        Log.d(TAG, String.format("Historical Data Points: %d months", monthlyRevenueData.size()));
-        Log.d(TAG, "=============================");
-
-        updateUI(revenueGrowth, profitGrowth, orderGrowth, marginGrowth);
-        generateChart();
-        showProgress(false);
+            synchronized (categoryProfit) {
+                categoryProfit.merge(categoryName, profit, Double::sum);
+            }
+        }
     }
 
-    private double calculateGrowthRate(double current, double previous) {
-        if (previous == 0) return 0;
-        return ((current - previous) / previous) * 100;
+    private void updateCategoryRevenue(Map<String, Double> categoryRevenue, String productId, double revenue) {
+        if (productId != null && productId.length() >= 2) {
+            String categoryCode = productId.substring(0, 2).toUpperCase();
+            String categoryName = getCategoryNameFromCode(categoryCode);
+
+            synchronized (categoryRevenue) {
+                categoryRevenue.merge(categoryName, revenue, Double::sum);
+            }
+
+            Log.d(TAG, String.format("Category %s revenue updated: +%.2f", categoryName, revenue));
+        }
     }
 
-    private void updateUI(double revenueGrowth, double profitGrowth, double orderGrowth, double marginGrowth) {
-        // Update growth indicators
-        setGrowthText(tvRevenueGrowth, revenueGrowth);
-        setGrowthText(tvProfitGrowth, profitGrowth);
-        setGrowthText(tvOrderGrowth, orderGrowth);
-        setGrowthText(tvMarginGrowth, marginGrowth);
+    private String getCategoryNameFromCode(String categoryCode) {
+        switch (categoryCode.toUpperCase()) {
+            case "CK": return "Carriers & Kennels";
+            case "AC": return "Accessories";
+            case "TO": return "Toys";
+            case "FU": return "Furniture";
+            case "PC": return "Pet Care";
+            default: return "Unknown";
+        }
+    }
 
-        // Update current month data
-        tvCurrentMonthRevenue.setText(currencyFormatter.format(currentMonthRevenue.get()));
-        tvCurrentMonthProfit.setText(currencyFormatter.format(currentMonthProfit.get()));
-        tvCurrentMonthOrders.setText(String.valueOf(currentMonthOrders.get()));
+    private List<Map<String, Object>> extractProductsFromFields(DocumentSnapshot doc) {
+        List<Map<String, Object>> products = new ArrayList<>();
 
-        // Update last month data
-        tvLastMonthRevenue.setText(currencyFormatter.format(lastMonthRevenue.get()));
-        tvLastMonthProfit.setText(currencyFormatter.format(lastMonthProfit.get()));
-        tvLastMonthOrders.setText(String.valueOf(lastMonthOrders.get()));
+        Log.d(TAG, "=== EXTRACTING PRODUCTS FROM ORDER_ITEMS ===");
 
-        // Generate trend summary
-        generateTrendSummary(revenueGrowth, profitGrowth, orderGrowth);
+        // Duyệt qua các field product1, product2, ... product20
+        for (int i = 1; i <= 20; i++) {
+            String productField = "product" + i;
+
+            // Lấy map product từ document
+            Map<String, Object> productMap = (Map<String, Object>) doc.get(productField);
+
+            if (productMap != null) {
+                String productId = (String) productMap.get("product_id");
+                Object quantity = productMap.get("quantity");
+                Object totalCostOfGoods = productMap.get("total_cost_of_goods");
+
+                Log.d(TAG, String.format("Found %s: ID=%s, Quantity=%s, Cost=%s",
+                        productField, productId, quantity, totalCostOfGoods));
+
+                if (productId != null && quantity != null) {
+                    Map<String, Object> product = new HashMap<>();
+                    product.put("product_id", productId);
+                    product.put("quantity", quantity);
+                    product.put("total_cost_of_goods", totalCostOfGoods);
+                    products.add(product);
+
+                    Log.d(TAG, String.format("Added product: %s (Qty: %s)", productId, quantity));
+                }
+            }
+        }
+
+        Log.d(TAG, String.format("Total products extracted: %d", products.size()));
+        return products;
+    }
+
+    private int convertToInt(Object obj) {
+        if (obj instanceof Long) {
+            return ((Long) obj).intValue();
+        } else if (obj instanceof Integer) {
+            return (Integer) obj;
+        } else if (obj instanceof Double) {
+            return ((Double) obj).intValue();
+        }
+        return 0;
+    }
+
+    private double convertToDouble(Object obj) {
+        if (obj instanceof Long) {
+            return ((Long) obj).doubleValue();
+        } else if (obj instanceof Integer) {
+            return ((Integer) obj).doubleValue();
+        } else if (obj instanceof Double) {
+            return (Double) obj;
+        } else if (obj instanceof Float) {
+            return ((Float) obj).doubleValue();
+        }
+        return 0.0;
+    }
+
+    private void updateMonthDataWithCategories(boolean isCurrentMonth, double revenue, double profit,
+                                               int orders, Map<String, Double> categoryRevenue,
+                                               Map<String, Double> categoryProfit) {
+
+        if (isCurrentMonth) {
+            currentMonthRevenue = revenue;
+            currentMonthProfit = profit;
+            currentMonthOrders = orders;
+
+            // Clear và copy category data
+            currentMonthCategoryRevenue.clear();
+            currentMonthCategoryRevenue.putAll(categoryRevenue);
+
+            currentMonthCategoryProfit.clear();
+            currentMonthCategoryProfit.putAll(categoryProfit);
+
+            Log.d(TAG, String.format("Updated current month data: Revenue=%.2f, Profit=%.2f, Orders=%d",
+                    revenue, profit, orders));
+
+            // Log category data
+            for (Map.Entry<String, Double> entry : categoryRevenue.entrySet()) {
+                Log.d(TAG, String.format("Current month category %s: Revenue=%.2f, Profit=%.2f",
+                        entry.getKey(), entry.getValue(),
+                        categoryProfit.getOrDefault(entry.getKey(), 0.0)));
+            }
+
+        } else {
+            lastMonthRevenue = revenue;
+            lastMonthProfit = profit;
+            lastMonthOrders = orders;
+
+            // Clear và copy category data
+            lastMonthCategoryRevenue.clear();
+            lastMonthCategoryRevenue.putAll(categoryRevenue);
+
+            lastMonthCategoryProfit.clear();
+            lastMonthCategoryProfit.putAll(categoryProfit);
+
+            Log.d(TAG, String.format("Updated last month data: Revenue=%.2f, Profit=%.2f, Orders=%d",
+                    revenue, profit, orders));
+
+            // Log category data
+            for (Map.Entry<String, Double> entry : categoryRevenue.entrySet()) {
+                Log.d(TAG, String.format("Last month category %s: Revenue=%.2f, Profit=%.2f",
+                        entry.getKey(), entry.getValue(),
+                        categoryProfit.getOrDefault(entry.getKey(), 0.0)));
+            }
+        }
+    }
+
+    private void updateUI() {
+        Log.d(TAG, "Updating UI with trend data...");
+
+        // Update current month
+        tvCurrentMonthRevenue.setText(String.format(Locale.getDefault(), "%.0f VNĐ", currentMonthRevenue));
+        tvCurrentMonthProfit.setText(String.format(Locale.getDefault(), "%.0f VNĐ", currentMonthProfit));
+        tvCurrentMonthOrders.setText(String.valueOf(currentMonthOrders));
+
+        // Update last month
+        tvLastMonthRevenue.setText(String.format(Locale.getDefault(), "%.0f VNĐ", lastMonthRevenue));
+        tvLastMonthProfit.setText(String.format(Locale.getDefault(), "%.0f VNĐ", lastMonthProfit));
+        tvLastMonthOrders.setText(String.valueOf(lastMonthOrders));
+
+        // Calculate and update growth
+        updateGrowthIndicators();
+
+        // Update analysis sections
+        updateAnalysisSections();
+
+        // Update chart
+        updateTrendChart();
 
         Log.d(TAG, "UI updated successfully");
     }
 
-    private void setGrowthText(TextView textView, double growth) {
-        String growthText = String.format("%+.1f%%", growth);
-        textView.setText(growthText);
+    private void updateGrowthIndicators() {
+        // Revenue growth
+        double revenueGrowth = lastMonthRevenue > 0 ?
+                ((currentMonthRevenue - lastMonthRevenue) / lastMonthRevenue) * 100 : 0;
+        tvRevenueGrowth.setText(String.format(Locale.getDefault(), "%.1f%%", revenueGrowth));
+        tvRevenueGrowth.setTextColor(revenueGrowth >= 0 ? Color.parseColor("#4CAF50") : Color.parseColor("#F44336"));
 
-        int color = growth >= 0 ?
-                getResources().getColor(R.color.success_color) :
-                getResources().getColor(R.color.error_color);
-        textView.setTextColor(color);
+        // Profit growth
+        double profitGrowth = lastMonthProfit > 0 ?
+                ((currentMonthProfit - lastMonthProfit) / lastMonthProfit) * 100 : 0;
+        tvProfitGrowth.setText(String.format(Locale.getDefault(), "%.1f%%", profitGrowth));
+        tvProfitGrowth.setTextColor(profitGrowth >= 0 ? Color.parseColor("#4CAF50") : Color.parseColor("#F44336"));
+
+        // Order growth
+        double orderGrowth = lastMonthOrders > 0 ?
+                ((double)(currentMonthOrders - lastMonthOrders) / lastMonthOrders) * 100 : 0;
+        tvOrderGrowth.setText(String.format(Locale.getDefault(), "%.1f%%", orderGrowth));
+        tvOrderGrowth.setTextColor(orderGrowth >= 0 ? Color.parseColor("#4CAF50") : Color.parseColor("#F44336"));
+
+        // Margin growth
+        double currentMargin = currentMonthRevenue > 0 ? (currentMonthProfit / currentMonthRevenue) * 100 : 0;
+        double lastMargin = lastMonthRevenue > 0 ? (lastMonthProfit / lastMonthRevenue) * 100 : 0;
+        double marginGrowth = lastMargin > 0 ? currentMargin - lastMargin : 0;
+        tvMarginGrowth.setText(String.format(Locale.getDefault(), "%.1f%%", marginGrowth));
+        tvMarginGrowth.setTextColor(marginGrowth >= 0 ? Color.parseColor("#4CAF50") : Color.parseColor("#F44336"));
     }
 
-    private void generateTrendSummary(double revenueGrowth, double profitGrowth, double orderGrowth) {
-        StringBuilder summary = new StringBuilder();
+    private void updateAnalysisSections() {
+        // Trend Summary
+        String trendSummary = generateTrendSummary();
+        tvTrendSummary.setText(trendSummary);
 
-        if (revenueGrowth > 0 && profitGrowth > 0 && orderGrowth > 0) {
-            summary.append("📈 Xu hướng tăng trưởng tích cực trên tất cả các chỉ số. ");
-        } else if (revenueGrowth > 0 && profitGrowth > 0) {
-            summary.append("📊 Doanh thu và lợi nhuận đều tăng trưởng tốt. ");
+        // Quarterly Growth (simplified calculation)
+        double quarterlyGrowth = lastMonthRevenue > 0 ?
+                ((currentMonthRevenue - lastMonthRevenue) / lastMonthRevenue) * 100 * 3 : 0;
+        tvQuarterlyGrowth.setText(String.format(Locale.getDefault(), "%.1f%%", quarterlyGrowth));
+
+        // Yearly Projection
+        String yearlyProjection = generateYearlyProjection();
+        tvYearlyProjection.setText(yearlyProjection);
+
+        // Cost Analysis
+        String costAnalysis = generateCostAnalysis();
+        tvCostAnalysis.setText(costAnalysis);
+
+        // Recommendations
+        String recommendations = generateRecommendations();
+        tvRecommendations.setText(recommendations);
+    }
+
+    private String generateTrendSummary() {
+        double revenueGrowth = lastMonthRevenue > 0 ?
+                ((currentMonthRevenue - lastMonthRevenue) / lastMonthRevenue) * 100 : 0;
+
+        if (revenueGrowth > 10) {
+            return "Kinh doanh đang phát triển mạnh mẽ với mức tăng trưởng doanh thu vượt 10%. Đây là tín hiệu tích cực cho sự phát triển của cửa hàng.";
         } else if (revenueGrowth > 0) {
-            summary.append("💰 Doanh thu tăng nhưng cần cải thiện hiệu quả. ");
+            return "Doanh thu có xu hướng tăng trưởng ổn định. Cần duy trì các chiến lược hiện tại và tìm kiếm cơ hội mở rộng.";
         } else {
-            summary.append("⚠️ Cần có chiến lược cải thiện hiệu suất kinh doanh. ");
+            return "Doanh thu có dấu hiệu giảm so với tháng trước. Cần xem xét lại chiến lược kinh doanh và tìm giải pháp cải thiện.";
         }
-
-        if (Math.abs(revenueGrowth) > 20) {
-            summary.append("Biến động doanh thu lớn cần được theo dõi. ");
-        }
-
-        if (profitGrowth > revenueGrowth + 5) {
-            summary.append("Hiệu quả quản lý chi phí được cải thiện đáng kể.");
-        } else if (profitGrowth < revenueGrowth - 5) {
-            summary.append("Cần xem xét tối ưu hóa chi phí và giá bán.");
-        }
-
-        tvTrendSummary.setText(summary.toString());
     }
 
-    private void generateChart() {
-        if (monthlyRevenueData.isEmpty()) {
-            Log.w(TAG, "No historical data for trend chart");
-            return;
+    private String generateYearlyProjection() {
+        double monthlyAverage = (currentMonthRevenue + lastMonthRevenue) / 2;
+        double yearlyProjection = monthlyAverage * 12;
+
+        return String.format(Locale.getDefault(),
+                "Dự báo doanh thu năm: %.0f VNĐ\nDựa trên xu hướng hiện tại, cửa hàng có thể đạt mức doanh thu này trong năm nay.",
+                yearlyProjection);
+    }
+
+    private String generateCostAnalysis() {
+        double currentMargin = currentMonthRevenue > 0 ? (currentMonthProfit / currentMonthRevenue) * 100 : 0;
+
+        if (currentMargin > 25) {
+            return "Tỷ suất lợi nhuận hiện tại rất tốt (>25%). Chi phí được kiểm soát hiệu quả.";
+        } else if (currentMargin > 15) {
+            return "Tỷ suất lợi nhuận ở mức trung bình (15-25%). Có thể tối ưu thêm chi phí để tăng lợi nhuận.";
+        } else {
+            return "Tỷ suất lợi nhuận thấp (<15%). Cần xem xét lại cấu trúc chi phí và giá bán.";
+        }
+    }
+
+    private String generateRecommendations() {
+        double revenueGrowth = lastMonthRevenue > 0 ?
+                ((currentMonthRevenue - lastMonthRevenue) / lastMonthRevenue) * 100 : 0;
+        double profitGrowth = lastMonthProfit > 0 ?
+                ((currentMonthProfit - lastMonthProfit) / lastMonthProfit) * 100 : 0;
+
+        StringBuilder recommendations = new StringBuilder();
+
+        if (revenueGrowth < 0) {
+            recommendations.append("• Tăng cường marketing và khuyến mãi\n");
+            recommendations.append("• Xem xét mở rộng sản phẩm mới\n");
         }
 
+        if (profitGrowth < revenueGrowth) {
+            recommendations.append("• Tối ưu hóa chi phí vận hành\n");
+            recommendations.append("• Điều chỉnh giá bán phù hợp\n");
+        }
+
+        if (currentMonthOrders < lastMonthOrders) {
+            recommendations.append("• Cải thiện trải nghiệm khách hàng\n");
+            recommendations.append("• Tăng cường chăm sóc khách hàng cũ\n");
+        }
+
+        if (recommendations.length() == 0) {
+            recommendations.append("Kinh doanh đang phát triển tốt. Tiếp tục duy trì các chiến lược hiện tại.");
+        }
+
+        return recommendations.toString();
+    }
+
+    private void updateTrendChart() {
         List<Entry> revenueEntries = new ArrayList<>();
         List<Entry> profitEntries = new ArrayList<>();
-        List<String> sortedMonths = new ArrayList<>(monthlyRevenueData.keySet());
-        sortedMonths.sort(String::compareTo);
+        List<String> labels = new ArrayList<>();
 
-        for (int i = 0; i < sortedMonths.size(); i++) {
-            String month = sortedMonths.get(i);
-            float revenue = monthlyRevenueData.get(month).floatValue();
-            float profit = monthlyProfitData.getOrDefault(month, 0.0).floatValue();
+        // Add data points
+        revenueEntries.add(new Entry(0, (float) lastMonthRevenue));
+        revenueEntries.add(new Entry(1, (float) currentMonthRevenue));
 
-            revenueEntries.add(new Entry(i, revenue));
-            profitEntries.add(new Entry(i, profit));
+        profitEntries.add(new Entry(0, (float) lastMonthProfit));
+        profitEntries.add(new Entry(1, (float) currentMonthProfit));
+
+        labels.add("Tháng trước");
+        labels.add("Tháng này");
+
+        // Create datasets
+        LineDataSet revenueDataSet = new LineDataSet(revenueEntries, "Doanh thu");
+        revenueDataSet.setColor(Color.parseColor("#9c162c"));
+        revenueDataSet.setCircleColor(Color.parseColor("#9c162c"));
+        revenueDataSet.setLineWidth(3f);
+        revenueDataSet.setCircleRadius(6f);
+        revenueDataSet.setValueTextSize(12f);
+
+        LineDataSet profitDataSet = new LineDataSet(profitEntries, "Lợi nhuận");
+        profitDataSet.setColor(Color.parseColor("#4CAF50"));
+        profitDataSet.setCircleColor(Color.parseColor("#4CAF50"));
+        profitDataSet.setLineWidth(3f);
+        profitDataSet.setCircleRadius(6f);
+        profitDataSet.setValueTextSize(12f);
+
+        LineData lineData = new LineData(revenueDataSet, profitDataSet);
+        trendChart.setData(lineData);
+
+        trendChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(labels));
+        trendChart.invalidate();
+    }
+
+    private void debugFlashsaleCache() {
+        Log.d(TAG, "=== FLASHSALE CACHE DEBUG ===");
+        Log.d(TAG, String.format("Total cached products: %d", flashsaleCache.size()));
+
+        if (flashsaleCache.isEmpty()) {
+            Log.w(TAG, "Flashsale cache is EMPTY!");
+        } else {
+            long currentTime = System.currentTimeMillis();
+            int activeCount = 0;
+
+            for (Map.Entry<String, FlashsaleInfo> entry : flashsaleCache.entrySet()) {
+                FlashsaleInfo info = entry.getValue();
+                boolean isActive = currentTime >= info.startTime && currentTime <= info.endTime;
+
+                if (isActive) activeCount++;
+
+                Log.d(TAG, String.format("Product: %s", entry.getKey()));
+                Log.d(TAG, String.format("  Flashsale: %s", info.flashsaleName));
+                Log.d(TAG, String.format("  Discount: %.2f%%", info.discountRate));
+                Log.d(TAG, String.format("  Original Price: %.2f", info.originalPrice));
+                Log.d(TAG, String.format("  Start: %d (%s)", info.startTime, new Date(info.startTime)));
+                Log.d(TAG, String.format("  End: %d (%s)", info.endTime, new Date(info.endTime)));
+                Log.d(TAG, String.format("  Current: %d (%s)", currentTime, new Date(currentTime)));
+                Log.d(TAG, String.format("  Active: %s", isActive));
+            }
+
+            Log.d(TAG, String.format("Active flashsales: %d/%d", activeCount, flashsaleCache.size()));
         }
-
-        if (!revenueEntries.isEmpty()) {
-            LineDataSet revenueDataSet = new LineDataSet(revenueEntries, "Doanh thu");
-            revenueDataSet.setColor(getResources().getColor(R.color.colorPrimary));
-            revenueDataSet.setCircleColor(getResources().getColor(R.color.colorPrimary));
-            revenueDataSet.setLineWidth(3f);
-            revenueDataSet.setCircleRadius(4f);
-            revenueDataSet.setDrawCircleHole(false);
-            revenueDataSet.setValueTextSize(0f);
-
-            LineDataSet profitDataSet = new LineDataSet(profitEntries, "Lợi nhuận");
-            profitDataSet.setColor(getResources().getColor(R.color.success_color));
-            profitDataSet.setCircleColor(getResources().getColor(R.color.success_color));
-            profitDataSet.setLineWidth(3f);
-            profitDataSet.setCircleRadius(4f);
-            profitDataSet.setDrawCircleHole(false);
-            profitDataSet.setValueTextSize(0f);
-
-            LineData lineData = new LineData(revenueDataSet, profitDataSet);
-            trendChart.setData(lineData);
-            trendChart.animateX(1500);
-            trendChart.invalidate();
-
-            Log.d(TAG, "Trend chart generated with " + sortedMonths.size() + " months");
-        }
+        Log.d(TAG, "============================");
     }
 
-    private Date getStartOfMonth(Date date) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        cal.set(Calendar.DAY_OF_MONTH, 1);
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-        return cal.getTime();
-    }
-
-    private Date getEndOfMonth(Date date) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
-        cal.set(Calendar.HOUR_OF_DAY, 23);
-        cal.set(Calendar.MINUTE, 59);
-        cal.set(Calendar.SECOND, 59);
-        cal.set(Calendar.MILLISECOND, 999);
-        return cal.getTime();
-    }
-
-    private void displayNoData() {
-        tvRevenueGrowth.setText("0%");
-        tvProfitGrowth.setText("0%");
-        tvOrderGrowth.setText("0%");
-        tvMarginGrowth.setText("0%");
-        tvCurrentMonthRevenue.setText("Chưa có dữ liệu");
-        tvLastMonthRevenue.setText("Chưa có dữ liệu");
-        tvCurrentMonthProfit.setText("Chưa có dữ liệu");
-        tvLastMonthProfit.setText("Chưa có dữ liệu");
-        tvCurrentMonthOrders.setText("0");
-        tvLastMonthOrders.setText("0");
-        tvTrendSummary.setText("Chưa có đủ dữ liệu để phân tích xu hướng");
-
-        Log.w(TAG, "No data available for trend analysis");
-    }
-
-    private void showProgress(boolean show) {
+    private void showLoading(boolean show) {
         progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.d(TAG, "Activity destroyed");
+    // Inner class for flashsale info
+    private static class FlashsaleInfo {
+        String productId;
+        double discountRate;
+        long startTime;
+        long endTime;
+        double originalPrice;
+        String flashsaleName;
+
+        @Override
+        public String toString() {
+            return String.format("FlashsaleInfo{id='%s', name='%s', discount=%.2f%%, price=%.2f, start=%d, end=%d}",
+                    productId, flashsaleName, discountRate, originalPrice, startTime, endTime);
+        }
     }
 }

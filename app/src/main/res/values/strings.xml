@@ -213,7 +213,11 @@
         <string name="total">Total: </string>
         <string name="n_products"> products</string>
         <string name="profit">Profit</string>
-    <string name="financial_overview_title">Financial overview</string>
-
-
+        <string name="financial_overview_title">Financial overview</string>
+        <string name="chart_icon">📊</string>
+        <string name="money_icon">💰</string>
+        <string name="trend_icon">📈</string>
+        <string name="summary_icon">📋</string>
+        <string name="arrow_icon">→</string>
+    <string name="default_growth">+0%</string>
 </resources>

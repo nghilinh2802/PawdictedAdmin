@@ -241,6 +241,10 @@
         <string name="total">Tổng cộng: </string>
         <string name="n_products"> sản phẩm</string>
         <string name="profit">Lợi nhuận</string>
-
-
+        <string name="chart_icon">📊</string>
+        <string name="money_icon">💰</string>
+        <string name="trend_icon">📈</string>
+        <string name="summary_icon">📋</string>
+        <string name="arrow_icon">→</string>
+    <string name="default_growth">+0%</string>
 </resources>

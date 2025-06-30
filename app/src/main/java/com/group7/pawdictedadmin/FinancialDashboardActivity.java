@@ -112,7 +112,6 @@ public class FinancialDashboardActivity extends AppCompatActivity {
         cardRevenueReport = findViewById(R.id.cardRevenueReport);
         cardProfitReport = findViewById(R.id.cardProfitReport);
         cardTrendAnalysis = findViewById(R.id.cardTrendAnalysis);
-        cardFinancialSummary = findViewById(R.id.cardFinancialSummary);
 
         currencyFormatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
         dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
@@ -547,37 +546,56 @@ public class FinancialDashboardActivity extends AppCompatActivity {
         // Revenue = total_cost_of_goods (đã bao gồm quantity)
         double revenue = totalCostOfGoods;
 
-        // Tính profit theo logic mới
-        double baseProfit = price * 0.3; // 30% profit cơ bản
-        double totalDiscount = discount; // Discount từ product
+        // Tính quantity từ revenue và price (ước tính)
+        int estimatedQuantity = (int) Math.round(totalCostOfGoods / price);
+        if (estimatedQuantity <= 0) estimatedQuantity = 1;
 
+        // LOGIC THỐNG NHẤT VỚI PROFIT REPORT
+        // STEP 1: Tính lợi nhuận cơ bản (30% của giá)
+        double baseProfit = price * 0.3 * estimatedQuantity;
+
+        // STEP 2: Tính discount từ sản phẩm
+        double productDiscountAmount = discount * estimatedQuantity;
+
+        // STEP 3: Tính flashsale discount
+        double flashsaleDiscountAmount = 0.0;
         if (isInFlashsale) {
-            // Thêm discount từ flashsale
-            totalDiscount += price * (discountRate / 100);
+            flashsaleDiscountAmount = (price * discountRate / 100) * estimatedQuantity;
         }
 
-        // Profit = base profit - total discount
-        double actualProfit = baseProfit - totalDiscount;
+        // STEP 4: Tính tổng discount
+        double totalDiscount = productDiscountAmount + flashsaleDiscountAmount;
 
-        // Nếu discount lớn hơn 30% profit thì profit sẽ âm
-        if (actualProfit < 0) {
-            Log.d(TAG, String.format("calculateProductRevenueAndProfit: Product %s has negative profit: %.2f (discount %.2f > base profit %.2f)",
-                    productId, actualProfit, totalDiscount, baseProfit));
+        // STEP 5: Áp dụng logic Pawdicted
+        double finalProfit;
+        if (totalDiscount <= baseProfit) {
+            finalProfit = baseProfit - totalDiscount;
+        } else {
+            double excessDiscount = totalDiscount - baseProfit;
+            finalProfit = -(excessDiscount); // Lợi nhuận âm
         }
 
         // Phân loại revenue
         if (isInFlashsale) {
             flashsaleRevenue.updateAndGet(v -> v + revenue);
-            Log.d(TAG, String.format("calculateProductRevenueAndProfit: FLASHSALE - Product %s - Revenue: %.2f, Profit: %.2f",
-                    productId, revenue, actualProfit));
         } else {
             normalRevenue.updateAndGet(v -> v + revenue);
-            Log.d(TAG, String.format("calculateProductRevenueAndProfit: NORMAL - Product %s - Revenue: %.2f, Profit: %.2f",
-                    productId, revenue, actualProfit));
         }
 
-        totalProfit.updateAndGet(v -> v + actualProfit);
+        totalProfit.updateAndGet(v -> v + finalProfit);
+        Log.d(TAG, "=== PROFIT COMPARISON DEBUG ===");
+        Log.d(TAG, String.format("Product: %s", productId));
+        Log.d(TAG, String.format("Base Profit: %.2f", baseProfit));
+        Log.d(TAG, String.format("Product Discount Amount: %.2f", productDiscountAmount));
+        Log.d(TAG, String.format("Flashsale Discount Amount: %.2f", flashsaleDiscountAmount));
+        Log.d(TAG, String.format("Total Discount: %.2f", totalDiscount));
+        Log.d(TAG, String.format("Final Profit: %.2f", finalProfit));
+        Log.d(TAG, "================================");
+
+        Log.d(TAG, String.format("UNIFIED LOGIC - Product %s: Revenue=%.2f, Profit=%.2f (Base=%.2f, Discount=%.2f)",
+                productId, revenue, finalProfit, baseProfit, totalDiscount));
     }
+
 
     private void checkProductInFlashsale(String productId, FlashsaleCheckCallback callback) {
         FlashsaleInfo flashsaleInfo = flashsaleCache.get(productId);
