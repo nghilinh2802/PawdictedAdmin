@@ -134,7 +134,7 @@ public class OrderManagementActivity extends AppCompatActivity {
                             }
                         } else {
                             Log.e(TAG, "Error getting orders", task.getException());
-                            Toast.makeText(OrderManagementActivity.this, "Failed to load orders", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(OrderManagementActivity.this, R.string.failed_to_load_orders, Toast.LENGTH_SHORT).show();
                             showLoading(false);
                         }
                     }

@@ -158,7 +158,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@strings/revenue_breakdown"
+                    android:text="@string/revenue_breakdown"
                     android:textColor="#9c162c"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -180,7 +180,7 @@
                             android:id="@+id/tvFlashsaleRevenue"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@strings/default_currency_value"
+                            android:text="@string/default_currency_value"
                             android:textColor="#FF5722"
                             android:textSize="16sp"
                             android:textStyle="bold" />
@@ -188,7 +188,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@strings/flashsale_revenue"
+                            android:text="@string/flashsale_revenue"
                             android:textColor="#666666"
                             android:textSize="12sp" />
 

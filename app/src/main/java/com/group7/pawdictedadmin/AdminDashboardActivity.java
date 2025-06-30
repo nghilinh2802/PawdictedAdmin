@@ -202,7 +202,7 @@ public class AdminDashboardActivity extends AppCompatActivity implements Navigat
                 .addOnFailureListener(e -> {
                     layoutEmptyActivities.setVisibility(View.VISIBLE);
                     recyclerViewActivities.setVisibility(View.GONE);
-                    Toast.makeText(this, "Failed to load recent activities", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.failed_to_load_recent_activities, Toast.LENGTH_SHORT).show();
                 });
     }
 
@@ -248,14 +248,14 @@ public class AdminDashboardActivity extends AppCompatActivity implements Navigat
         Intent intent = null;
 
         if (id == R.id.nav_dashboard) {
-            Toast.makeText(this, "Already on Dashboard", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.already_on_dashboard, Toast.LENGTH_SHORT).show();
 //        } else if (id == R.id.nav_settings) {
 //            intent = new Intent(this, SettingManagementActivity.class);
         } else if (id == R.id.nav_logout) {
             mAuth.signOut();
             intent = new Intent(this, LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.logged_out, Toast.LENGTH_SHORT).show();
         }
 
         if (intent != null) {

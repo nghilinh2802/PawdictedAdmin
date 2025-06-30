@@ -396,10 +396,10 @@ public class OrderDetailActivity extends AppCompatActivity {
 
     private void showConfirmDialog() {
         new AlertDialog.Builder(this)
-                .setTitle("Confirm Order")
-                .setMessage("Are you sure you want to confirm this order? The status will be changed to 'Shipped'.")
-                .setPositiveButton("Confirm", (dialog, which) -> confirmOrder())
-                .setNegativeButton("Cancel", null)
+                .setTitle(R.string.confirm_order)
+                .setMessage(R.string.confirm_order_message)
+                .setPositiveButton(R.string.confirm, (dialog, which) -> confirmOrder())
+                .setNegativeButton(R.string.cancel, null)
                 .show();
     }
 
@@ -412,7 +412,7 @@ public class OrderDetailActivity extends AppCompatActivity {
                 .update(updates)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        Toast.makeText(OrderDetailActivity.this, "Order confirmed successfully!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(OrderDetailActivity.this, R.string.order_confirmed_successfully, Toast.LENGTH_SHORT).show();
                         currentOrder.setStatus("Shipped");
                         btnConfirmOrder.setVisibility(View.GONE);
 
@@ -424,7 +424,7 @@ public class OrderDetailActivity extends AppCompatActivity {
 
                     } else {
                         Log.e(TAG, "Error updating order status", task.getException());
-                        Toast.makeText(OrderDetailActivity.this, "Failed to confirm order. Please try again.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(OrderDetailActivity.this, R.string.failed_to_confirm_order_please_try_again, Toast.LENGTH_SHORT).show();
                     }
                 });
     }

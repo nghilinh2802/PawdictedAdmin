@@ -77,7 +77,7 @@ public class PendingOrderAdapter extends RecyclerView.Adapter<PendingOrderAdapte
         // Set item count
         List<OrderItem> items = order.getItems();
         int itemCount = (items != null) ? items.size() : 0;
-        holder.tvItemCount.setText("Tổng cộng: " + itemCount + " sản phẩm");
+        holder.tvItemCount.setText(context.getString(R.string.total) + itemCount + context.getString(R.string.n_products));
 
         // Set customer avatar if available
         if (customer != null && customer.getAvatarImg() != null && !customer.getAvatarImg().isEmpty()) {

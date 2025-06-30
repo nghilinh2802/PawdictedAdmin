@@ -34,7 +34,6 @@
     <string name="title_remember_me">Ghi nhớ tôi?</string>
     <string name="title_forgot_password">Quên mật khẩu?</string>
     <string name="title_or_login_with">Hoặc đăng nhập bằng</string>
-    <string name="title_dont_have_account">Chưa có tài khoản?</string>
     <string name="title_signup_login">Đăng ký</string>
     <string name="title_fill_all_fields">Vui lòng điền đầy đủ các trường!</string>
     <string name="title_email_not_found">Không tìm thấy email</string>
@@ -230,6 +229,18 @@
         <string name="revenue_analysis">Phân tích Doanh thu</string>
         <string name="profit_by_category">Lợi nhuận theo Danh mục</string>
         <string name="quarterly_performance">Hiệu suất theo Quý</string>
+        <string name="failed_to_load_orders">Không thể tải danh sách đơn hàng</string>
+        <string name="confirm_order_message">Bạn có chắc chắn muốn xác nhận đơn hàng này không?</string>
+        <string name="confirm">Xác nhận</string>
+        <string name="cancel">Hủy</string>
+        <string name="order_confirmed_successfully">Xác nhận đơn hàng thành công!</string>
+        <string name="failed_to_confirm_order_please_try_again">Xác nhận đơn hàng thất bại. Vui lòng thử lại.</string>
+        <string name="failed_to_load_recent_activities">Không thể tải hoạt động gần đây</string>
+        <string name="already_on_dashboard">Bạn đang ở trang tổng quan</string>
+        <string name="logged_out">Đã đăng xuất</string>
+        <string name="total">Tổng cộng: </string>
+        <string name="n_products"> sản phẩm</string>
+        <string name="profit">Lợi nhuận</string>
 
 
 </resources>
