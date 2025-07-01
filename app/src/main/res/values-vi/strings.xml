@@ -101,22 +101,22 @@
     <string name="revenue_trend_in_30days">Xu hướng doanh thu trong 30 ngày tới</string>
     <string name="performance_by_category">Hiệu suất theo danh mục</string>
     <string name="detail_infor">Thông tin chi tiết</string>
-    <string name="alert_stock">Running out of stock</string>
-    <string name="three_product_running_out">3 products is running out of stock</string>
-    <string name="most_popular_cate">Most Popular Category</string>
-    <string name="revenue_growth">Revenue Growth</string>
-    <string name="profit_growth">Profit Growth</string>
-    <string name="order_growth">Order Growth</string>
-    <string name="profit_margins_growth">Profit Margins Growth</string>
-    <string name="revenue_chart">Revenue Chart</string>
-    <string name="profit_chart">Profit Chart</string>
-    <string name="revenue_by_cate">Revenue by Category</string>
-    <string name="detail_report">Detail Report</string>
-    <string name="fs_and_nofs_compare">Detail Analyze Flashsale and Normal Revenue</string>
+    <string name="alert_stock">Sắp hết hàng</string>
+    <string name="three_product_running_out">3 sản phẩm sắp hết hàng</string>
+    <string name="most_popular_cate">Danh mục phổ biến nhất</string>
+    <string name="revenue_growth">Tăng trưởng doanh thu</string>
+    <string name="profit_growth">Tăng trưởng lợi nhuận</string>
+    <string name="order_growth">Tăng trưởng đơn hàng</string>
+    <string name="profit_margins_growth">Tăng trưởng biên lợi nhuận</string>
+    <string name="revenue_chart">Biểu đồ doanh thu</string>
+    <string name="profit_chart">Biểu đồ lợi nhuận</string>
+    <string name="revenue_by_cate">Doanh thu theo danh mục</string>
+    <string name="detail_report">Báo cáo chi tiết</string>
+    <string name="fs_and_nofs_compare">Phân tích Doanh thu Flashsale và Doanh thu Thường</string>
     <string name="analyze_profit_by_cate_n_flashsale">Phân tích lợi nhuận theo danh mục và flashsale</string>
-    <string name="month_quarter_growth_trend">Monthly and quarterly growth trends</string>
-    <string name="finance_overview">Finance Overview</string>
-    <string name="summary">Comprehensive summary with insights and recommendations</string>
+    <string name="month_quarter_growth_trend">Xu hướng tăng trưởng theo tháng và quý</string>
+    <string name="finance_overview">Tổng quan tài chính</string>
+    <string name="summary">Tóm tắt toàn diện với các phân tích và khuyến nghị</string>
     <string name="profit_report_title">Báo cáo Lợi nhuận</string>
 
     <!-- Loading states -->
